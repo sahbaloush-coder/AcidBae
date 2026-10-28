@@ -214,6 +214,7 @@
                         <option value="case6">Case 6: Severe Diarrhea (NAGMA, -ve UAG)</option>
                         <option value="case7">Case 7: Ethylene Glycol Poisoning (High Osm Gap HAGMA)</option>
                         <option value="case8">Case 8: Chronic COPD + Thiazide Diuretic (Resp Acid + Met Alk)</option>
+                        <option value="case9">Case 9: Tenofovir Fanconi — Proximal RTA Type 2 (NAGMA, -ve UAG)</option>
                     </select>
                 </div>
 
@@ -489,7 +490,7 @@
                                 <label class="text-xs font-bold text-slate-700">Urine K⁺</label>
                             </div>
                             <input id="lab_UK" type="number" step="0.1" placeholder="25" oninput="onLabChange()" class="kawaii-input w-full bg-amber-50/50 border-amber-300 text-slate-800 py-1 text-sm">
-                            <span class="text-[10px] text-slate-400 mt-0.5">&lt;20 laxative</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5">&lt;20 = GI K⁺ loss</span>
                         </div>
                         <!-- Urine Cl -->
                         <div class="bg-white p-2 rounded-xl border-2 border-amber-200 flex flex-col items-center">
@@ -659,7 +660,7 @@
                     <span class="w-9 h-9 rounded-full bg-pink-500 text-white font-cute font-bold text-lg flex items-center justify-center shadow-sm shrink-0">1</span>
                     <div>
                         <h2 class="text-lg sm:text-xl font-bold text-pink-950">Identify the Primary Disorder</h2>
-                        <p class="text-xs text-pink-800 font-medium">Look at pH first (Acidemia &lt; 7.35 vs Alkalemia &gt; 7.45), then check who matches the direction: HCO₃⁻ or pCO₂!</p>
+                        <p class="text-xs text-pink-800 font-medium">Look at pH first (Acidemia &lt; 7.35 vs Alkalemia &gt; 7.45), then check who matches the direction: HCO₃⁻ or pCO₂! ⚖️ Normal pH? The side of 7.40 it leans to wins.</p>
                     </div>
                 </div>
                 <button onclick="openModal('step1')" class="kawaii-btn bg-white hover:bg-pink-50 border-pink-400 text-pink-700 font-bold text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-1.5">
@@ -800,19 +801,19 @@
 
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span class="font-cute font-bold text-sky-950 text-sm sm:text-base">• Compensation Status:</span>
+                        <span class="font-cute font-bold text-sky-950 text-sm sm:text-base">• Measured vs Expected:</span>
                         <!-- Radio Pills matching Image 1: ✓ , Under , Over -->
                         <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
-                            <input type="radio" name="user_compStatus" value="compensated" class="accent-sky-600 w-4 h-4">
-                            <span>✔️ Appropriately Compensated</span>
+                            <input type="radio" name="user_compStatus" value="expected" class="accent-sky-600 w-4 h-4">
+                            <span>✔️ As Expected (within ± 2)</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
-                            <input type="radio" name="user_compStatus" value="under" class="accent-sky-600 w-4 h-4">
-                            <span>⭕ Under-compensated / Higher CO₂</span>
+                            <input type="radio" name="user_compStatus" value="higher" class="accent-sky-600 w-4 h-4">
+                            <span>⬆️ Higher than Expected</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
-                            <input type="radio" name="user_compStatus" value="over" class="accent-sky-600 w-4 h-4">
-                            <span>⭕ Over-compensated / Lower CO₂</span>
+                            <input type="radio" name="user_compStatus" value="lower" class="accent-sky-600 w-4 h-4">
+                            <span>⬇️ Lower than Expected</span>
                         </label>
                     </div>
                     <div id="fb_compStatus" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
@@ -1010,7 +1011,7 @@
 
                     <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 space-y-1">
                         <div>Calc Osm = 2×Na(<span id="eq_osm_na" class="text-purple-700">--</span>) + Glu(<span id="eq_osm_glu" class="text-purple-700">--</span>)/18 + BUN(<span id="eq_osm_bun" class="text-purple-700">--</span>)/2.8 + EtOH(<span id="eq_osm_etoh" class="text-purple-700">--</span>)/4.6 = <span id="eq_osm_calc" class="eq-slot">--</span></div>
-                        <div class="text-[11px] text-slate-500">💡 Note: If Glucose/BUN are already entered in small mmol/L units (&lt;35), our calculator automatically adds them without dividing!</div>
+                        <div class="text-[11px] text-slate-500">💡 Using mmol/L? Tap the unit button under Glu / BUN / EtOH ⇄ — mmol/L values are added as they are (no dividing).</div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -1043,7 +1044,7 @@
                         </label>
                         <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
                             <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
-                            <span>🏃 <b>Lactic Acid:</b> Sepsis/Shock, Ischemia (pure LA Δ/Δ ~1.6)</span>
+                            <span>🏃 <b>Lactic Acid:</b> Sepsis/Shock, Ischemia, Metformin (pure LA Δ/Δ ~1.6)</span>
                         </label>
                         <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
                             <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
@@ -1051,7 +1052,7 @@
                         </label>
                         <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
                             <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
-                            <span>☠️ <b>Toxins:</b> Methanol (eye), Ethylene glycol (Ca-Ox crystals), ASA (Resp Alk), Propylene glycol</span>
+                            <span>☠️ <b>Toxins:</b> Methanol (👁️ eye), Ethylene glycol (Ca-Ox crystals), ASA (+ Resp Alk), Propylene glycol → 🔮 check Osm Gap!</span>
                         </label>
                     </div>
                 </div>
@@ -1127,14 +1128,14 @@
                             <div class="font-bold text-rose-900 flex items-center gap-1">➕ If UAG is POSITIVE (Always Distal!):</div>
                             <ul class="list-disc list-inside text-slate-700 space-y-0.5">
                                 <li><b>↓/Nl K⁺ + Urine pH &gt; 5.5:</b> <span class="text-rose-700 font-bold">Distal RTA (Type 1)</span> (Sjögren, SLE, stones, AmphoB)</li>
-                                <li><b>↑ Serum K⁺ (Hyperkalemia):</b> <span class="text-rose-700 font-bold">Distal RTA (Type 4)</span> (Hypoaldo, DM, ACEi/ARB, NSAIDs)</li>
+                                <li><b>↑ Serum K⁺ (Hyperkalemia):</b> <span class="text-rose-700 font-bold">Distal RTA (Type 4)</span> (Hypoaldo, DM, ACEi/ARB, NSAIDs, 💊 Trimethoprim, Tacrolimus) · urine pH usually &lt; 5.5</li>
                             </ul>
                         </div>
                         <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
-                            <div class="font-bold text-emerald-900 flex items-center gap-1">➖ If UAG is NEGATIVE (Intact Distal NH₄⁺):</div>
+                            <div class="font-bold text-emerald-900 flex items-center gap-1">➖ If UAG is NEGATIVE (Intact Distal NH₄⁺) — 🕵️ history decides:</div>
                             <ul class="list-disc list-inside text-slate-700 space-y-0.5">
                                 <li><b>GI Bicarb Loss:</b> <span class="text-emerald-700 font-bold">Diarrhea</span> or Laxative abuse (Urine K⁺ &lt; 20)</li>
-                                <li><b>Urine pH &lt; 5.3 + Fanconi/MM/Meds:</b> <span class="text-emerald-700 font-bold">Proximal RTA (Type 2)</span> (Acetazolamide, Topiramate, Tenofovir)</li>
+                                <li><b>Fanconi clues (glucose in urine with normal blood sugar, ↓ phosphate) / MM / Meds:</b> <span class="text-emerald-700 font-bold">Proximal RTA (Type 2)</span> (Acetazolamide, Topiramate, Tenofovir)</li>
                             </ul>
                         </div>
                     </div>
@@ -1149,6 +1150,7 @@
                                 <option value="Distal RTA (Type 1)">Distal RTA (Type 1) — Positive UAG, Urine pH &gt; 5.5, ↓K⁺</option>
                                 <option value="Proximal RTA (Type 2)">Proximal RTA (Type 2) — Negative UAG, Urine pH &lt; 5.3, ↓K⁺</option>
                                 <option value="Type 4 RTA (Hypoaldosteronism)">Distal RTA (Type 4 / Hypoaldo) — Positive UAG + Hyperkalemia ↑K⁺</option>
+                                <option value="UAG Unreliable">⚠️ Can't use UAG here (Ketones in urine or Urine Na⁺ &lt; 20) → use history / Urine Osm Gap</option>
                             </select>
                         </div>
                         <div id="fb_rtaStatus" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
@@ -1159,7 +1161,7 @@
                 <div class="bg-amber-100/80 border-2 border-amber-300 rounded-2xl p-3 text-xs text-amber-950 flex items-start gap-2.5">
                     <span class="text-lg">⚠️</span>
                     <div>
-                        <b>Clinical Pearl (When UAG is unreliable):</b> UAG is not used in AKI, dehydration, or polyuria. Instead, use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion (RTA)!
+                        <b>Clinical Pearl (When UAG is unreliable):</b> 🔥 Ketones (DKA) or other unmeasured anions in the urine · 🧂 Urine Na⁺ &lt; 20 (volume depletion) · 🫘 AKI. Instead, use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion (RTA)!
                     </div>
                 </div>
             </section>
@@ -1254,6 +1256,11 @@
     <script>
         // Current worksheet mode: 'try' or 'auto'
         let currentMode = 'try';
+
+        // For a negative UAG, the preset case's history says GI loss vs Proximal RTA (null = either accepted)
+        let activeCaseNegUagCause = null;
+
+        const COMP_LABELS = { expected: 'As Expected', higher: 'Higher than Expected', lower: 'Lower than Expected' };
 
         // Track selected units for convertible lab inputs
         const labUnits = {
@@ -1370,8 +1377,8 @@
                 title: "Case 1: Classic Diabetic Ketoacidosis (Pure HAGMA)",
                 vignette: "A 22-year-old with Type 1 Diabetes presents with polyuria, abdominal pain, and fruity breath. Serum ketones are strongly positive.",
                 labs: {
-                    pH: 7.22, HCO3: 10, CO2: 23, respChronicity: 'acute',
-                    Na: 136, K: 5.1, Cl: 102, Alb: 4.0, Osm: 304, Glu: 450, BUN: 28, EtOH: 0, Lac: 1.4, Ket: 'pos',
+                    pH: 7.29, HCO3: 12, CO2: 26, respChronicity: 'acute',
+                    Na: 136, K: 5.1, Cl: 100, Alb: 4.0, Osm: 310, Glu: 450, BUN: 28, EtOH: 0, Lac: 1.4, Ket: 'pos',
                     UNa: 45, UK: 30, UCl: 95, UpH: 5.0
                 }
             },
@@ -1379,16 +1386,16 @@
                 title: "Case 2: DKA + Severe Vomiting (HAGMA + Concurrent Metabolic Alkalosis)",
                 vignette: "A 29-year-old with Type 1 DM presents after 2 days of intractable vomiting and missed insulin doses. Notice how high the Anion Gap went compared to the modest drop in HCO₃⁻ (Δ/Δ > 2)!",
                 labs: {
-                    pH: 7.38, HCO3: 18, CO2: 33, respChronicity: 'acute',
+                    pH: 7.36, HCO3: 18, CO2: 33, respChronicity: 'acute',
                     Na: 138, K: 3.4, Cl: 90, Alb: 4.0, Osm: 300, Glu: 360, BUN: 28, EtOH: 0, Lac: 1.5, Ket: 'pos',
                     UNa: 30, UK: 25, UCl: 65, UpH: 5.5
                 }
             },
             case3: {
                 title: "Case 3: DKA + Profuse Watery Diarrhea (HAGMA + Concurrent NAGMA)",
-                vignette: "A 35-year-old with gastroenteritis and Type 1 DM presents with both ketonemia and severe watery diarrhea. Notice how HCO₃⁻ dropped way more than the Anion Gap rose (Δ/Δ < 1)!",
+                vignette: "A 35-year-old with gastroenteritis and Type 1 DM presents with both ketonemia and severe watery diarrhea. Notice how HCO₃⁻ dropped way more than the Anion Gap rose (Δ/Δ < 1)! 🔥 Ketones in the urine make the Urine AG unreliable here — let the history explain the NAGMA.",
                 labs: {
-                    pH: 7.15, HCO3: 8, CO2: 20, respChronicity: 'acute',
+                    pH: 7.22, HCO3: 8, CO2: 20, respChronicity: 'acute',
                     Na: 138, K: 3.6, Cl: 110, Alb: 4.0, Osm: 298, Glu: 324, BUN: 18, EtOH: 0, Lac: 1.2, Ket: 'pos',
                     UNa: 35, UK: 25, UCl: 90, UpH: 5.1
                 }
@@ -1397,7 +1404,7 @@
                 title: "Case 4: Sjögren's Syndrome — Classic Distal RTA (Type 1)",
                 vignette: "A 34-year-old woman with dry eyes, dry mouth (Sjögren's), and recurrent calcium phosphate kidney stones presents with muscle weakness. She has NAGMA, hypokalemia, positive UAG, and urine pH > 5.5.",
                 labs: {
-                    pH: 7.28, HCO3: 14, CO2: 29, respChronicity: 'acute',
+                    pH: 7.31, HCO3: 14, CO2: 29, respChronicity: 'acute',
                     Na: 140, K: 2.8, Cl: 116, Alb: 4.0, Osm: 288, Glu: 90, BUN: 14, EtOH: 0, Lac: 1.0, Ket: 'neg',
                     UNa: 55, UK: 25, UCl: 60, UpH: 6.2
                 }
@@ -1406,7 +1413,7 @@
                 title: "Case 5: Diabetic Nephropathy + ACE Inhibitor — Type 4 RTA (Hypoaldosteronism)",
                 vignette: "A 64-year-old man with long-standing diabetes on lisinopril and ibuprofen presents with mild hyperchloremic metabolic acidosis (NAGMA), hyperkalemia (K⁺ 5.8), and a positive Urine Anion Gap.",
                 labs: {
-                    pH: 7.31, HCO3: 17, CO2: 34, respChronicity: 'acute',
+                    pH: 7.32, HCO3: 17, CO2: 34, respChronicity: 'acute',
                     Na: 137, K: 5.8, Cl: 110, Alb: 4.0, Osm: 286, Glu: 144, BUN: 22, EtOH: 0, Lac: 1.1, Ket: 'neg',
                     UNa: 45, UK: 20, UCl: 50, UpH: 5.1
                 }
@@ -1414,28 +1421,39 @@
             case6: {
                 title: "Case 6: Severe Acute Diarrhea (Extrarenal NAGMA, Negative UAG)",
                 vignette: "A 40-year-old traveler presents with 4 days of watery diarrhea. Kidneys are healthy and excreting massive NH₄⁺ (tracked by high Urine Cl⁻ → strongly negative UAG).",
+                negUagCause: 'GI Loss (Diarrhea / Laxatives) - No RTA',
                 labs: {
-                    pH: 7.26, HCO3: 14, CO2: 29, respChronicity: 'acute',
+                    pH: 7.31, HCO3: 14, CO2: 29, respChronicity: 'acute',
                     Na: 138, K: 3.2, Cl: 114, Alb: 4.0, Osm: 285, Glu: 90, BUN: 14, EtOH: 0, Lac: 1.1, Ket: 'neg',
                     UNa: 30, UK: 22, UCl: 85, UpH: 5.0
                 }
             },
             case7: {
                 title: "Case 7: Ethylene Glycol (Antifreeze) Poisoning — High Osmolar Gap HAGMA",
-                vignette: "A 48-year-old presents confused with flank pain and envelope-shaped calcium oxalate crystals in the urine that fluoresce under UV light. Measured Serum Osm is 335 mOsm/kg!",
+                vignette: "A 48-year-old presents confused with flank pain and calcium oxalate crystals in the urine (needle- or envelope-shaped). Measured Serum Osm is 335 mOsm/kg!",
                 labs: {
-                    pH: 7.18, HCO3: 10, CO2: 23, respChronicity: 'acute',
+                    pH: 7.26, HCO3: 10, CO2: 23, respChronicity: 'acute',
                     Na: 140, K: 4.5, Cl: 104, Alb: 4.0, Osm: 335, Glu: 90, BUN: 14, EtOH: 0, Lac: 2.2, Ket: 'neg',
                     UNa: 40, UK: 25, UCl: 70, UpH: 5.3
                 }
             },
             case8: {
                 title: "Case 8: Chronic COPD on Loop/Thiazide Diuretic (Chronic Resp Acidosis + Met Alkalosis)",
-                vignette: "A 68-year-old with severe chronic COPD (>3 days) was started on high-dose diuretics. His pCO₂ is 60, so Chronic Resp Acidosis expects HCO₃⁻ = 24 + 2×4 = 32. His actual HCO₃⁻ is 38 (concurrent Metabolic Alkalosis!).",
+                vignette: "A 68-year-old with severe chronic COPD (>3 days) was started on high-dose diuretics. His pCO₂ is 65, so Chronic Resp Acidosis expects HCO₃⁻ = 24 + 2.5×4 = 34. His actual HCO₃⁻ is 38 (concurrent Metabolic Alkalosis!).",
                 labs: {
-                    pH: 7.36, HCO3: 38, CO2: 60, respChronicity: 'chronic',
+                    pH: 7.39, HCO3: 38, CO2: 65, respChronicity: 'chronic',
                     Na: 139, K: 3.3, Cl: 91, Alb: 4.0, Osm: 288, Glu: 95, BUN: 16, EtOH: 0, Lac: 1.0, Ket: 'neg',
                     UNa: 40, UK: 30, UCl: 70, UpH: 6.0
+                }
+            },
+            case9: {
+                title: "Case 9: Tenofovir-Induced Fanconi Syndrome — Proximal RTA (Type 2)",
+                vignette: "A 52-year-old with HIV on tenofovir has fatigue and bone pain. Urine dipstick shows glucose despite a normal blood sugar, and serum phosphate is low (Fanconi clues 🕵️). NAGMA with a negative UAG and acidic urine (pH 5.0).",
+                negUagCause: 'Proximal RTA (Type 2)',
+                labs: {
+                    pH: 7.32, HCO3: 15, CO2: 30, respChronicity: 'acute',
+                    Na: 139, K: 3.1, Cl: 114, Alb: 4.0, Osm: 290, Glu: 95, BUN: 14, EtOH: 0, Lac: 1.0, Ket: 'neg',
+                    UNa: 60, UK: 35, UCl: 105, UpH: 5.0
                 }
             }
         };
@@ -1598,17 +1616,22 @@
                         sol.primaryDisorder = ((HCO3 - 24) / 24 >= (40 - CO2) / 40) ? 'Metabolic Alkalosis' : 'Respiratory Alkalosis';
                     }
                 } else {
-                    // Normal pH (7.35 - 7.45), check if abnormal HCO3/CO2 or elevated AG
-                    if (HCO3 < 22 || (sol.correctedAG !== null && sol.correctedAG > 12 && HCO3 < 24)) {
-                        sol.primaryDisorder = 'Metabolic Acidosis';
-                    } else if (CO2 > 45 && pH <= 7.40) {
-                        sol.primaryDisorder = 'Respiratory Acidosis';
-                    } else if (HCO3 > 26 && pH > 7.40) {
-                        sol.primaryDisorder = 'Metabolic Alkalosis';
-                    } else if (CO2 < 35 && pH > 7.40) {
-                        sol.primaryDisorder = 'Respiratory Alkalosis';
+                    // Normal pH (7.35 - 7.45): the side of 7.40 it leans to points to the primary disorder
+                    const highAG = sol.correctedAG !== null && sol.correctedAG > 12;
+                    if (pH < 7.40) {
+                        if (HCO3 < 22) sol.primaryDisorder = 'Metabolic Acidosis';
+                        else if (CO2 > 45) sol.primaryDisorder = 'Respiratory Acidosis';
+                        else if (highAG) sol.primaryDisorder = 'Metabolic Acidosis';
+                        else sol.primaryDisorder = 'Normal / Mixed Normal pH';
+                    } else if (pH > 7.40) {
+                        if (HCO3 > 26) sol.primaryDisorder = 'Metabolic Alkalosis';
+                        else if (CO2 < 35) sol.primaryDisorder = 'Respiratory Alkalosis';
+                        else if (highAG) sol.primaryDisorder = 'Metabolic Acidosis';
+                        else sol.primaryDisorder = 'Normal / Mixed Normal pH';
                     } else {
-                        sol.primaryDisorder = 'Normal / Mixed Normal pH';
+                        if (highAG || HCO3 < 22) sol.primaryDisorder = 'Metabolic Acidosis';
+                        else if (HCO3 > 26) sol.primaryDisorder = 'Metabolic Alkalosis';
+                        else sol.primaryDisorder = 'Normal / Mixed Normal pH';
                     }
                 }
                 sol.reasoningSteps.push(`• <b>Step 1 (Primary):</b> pH is ${pH}, HCO₃⁻ is ${HCO3}, pCO₂ is ${CO2} → Primary process is <b>${sol.primaryDisorder}</b>.`);
@@ -1637,13 +1660,13 @@
                     `;
 
                     if (CO2 >= low && CO2 <= high) {
-                        sol.compStatus = 'compensated';
+                        sol.compStatus = 'expected';
                         sol.secondDisorder = 'None';
                     } else if (CO2 > high) {
-                        sol.compStatus = 'under';
+                        sol.compStatus = 'higher';
                         sol.secondDisorder = 'Concurrent Respiratory Acidosis';
                     } else {
-                        sol.compStatus = 'over';
+                        sol.compStatus = 'lower';
                         sol.secondDisorder = 'Concurrent Respiratory Alkalosis';
                     }
                 } else if (sol.primaryDisorder === 'Metabolic Alkalosis') {
@@ -1664,13 +1687,13 @@
                     `;
 
                     if (CO2 >= low && CO2 <= high) {
-                        sol.compStatus = 'compensated';
+                        sol.compStatus = 'expected';
                         sol.secondDisorder = 'None';
                     } else if (CO2 > high) {
-                        sol.compStatus = 'under';
+                        sol.compStatus = 'higher';
                         sol.secondDisorder = 'Concurrent Respiratory Acidosis';
                     } else {
-                        sol.compStatus = 'over';
+                        sol.compStatus = 'lower';
                         sol.secondDisorder = 'Concurrent Respiratory Alkalosis';
                     }
                 } else if (sol.primaryDisorder === 'Respiratory Acidosis') {
@@ -1693,13 +1716,13 @@
                     `;
 
                     if (HCO3 >= low && HCO3 <= high) {
-                        sol.compStatus = 'compensated';
+                        sol.compStatus = 'expected';
                         sol.secondDisorder = 'None';
                     } else if (HCO3 > high) {
-                        sol.compStatus = 'over';
+                        sol.compStatus = 'higher';
                         sol.secondDisorder = 'Concurrent Metabolic Alkalosis';
                     } else {
-                        sol.compStatus = 'under';
+                        sol.compStatus = 'lower';
                         sol.secondDisorder = 'Concurrent Metabolic Acidosis';
                     }
                 } else if (sol.primaryDisorder === 'Respiratory Alkalosis') {
@@ -1722,18 +1745,20 @@
                     `;
 
                     if (HCO3 >= low && HCO3 <= high) {
-                        sol.compStatus = 'compensated';
+                        sol.compStatus = 'expected';
                         sol.secondDisorder = 'None';
                     } else if (HCO3 > high) {
-                        sol.compStatus = 'under';
+                        sol.compStatus = 'higher';
                         sol.secondDisorder = 'Concurrent Metabolic Alkalosis';
                     } else {
-                        sol.compStatus = 'over';
+                        sol.compStatus = 'lower';
                         sol.secondDisorder = 'Concurrent Metabolic Acidosis';
                     }
                 } else {
                     sol.expCompTarget = 40;
-                    sol.compStatus = 'compensated';
+                    sol.expCompRangeText = 'pCO₂ 38 – 42 mmHg (no compensation needed)';
+                    sol.compMeasuredVal = CO2;
+                    sol.compStatus = 'expected';
                     sol.secondDisorder = 'None';
                 }
 
@@ -1744,7 +1769,7 @@
             if (sol.correctedAG !== null) {
                 if (sol.correctedAG > 12) {
                     sol.agType = 'HAGMA';
-                } else if (sol.primaryDisorder === 'Metabolic Acidosis' || (HCO3 !== null && HCO3 < 22)) {
+                } else if (sol.primaryDisorder === 'Metabolic Acidosis' || sol.secondDisorder === 'Concurrent Metabolic Acidosis') {
                     sol.agType = 'NAGMA';
                 } else {
                     sol.agType = 'No Acidosis / Normal AG';
@@ -1783,8 +1808,8 @@
             setSlot('eq_osm_etoh', EtOH, 1);
 
             if (Na !== null) {
-                const isGluMmol = (labUnits.Glu === 'mmol/L') || (Glu < 35);
-                const isBunMmol = (labUnits.BUN === 'mmol/L') || (BUN < 10);
+                const isGluMmol = (labUnits.Glu === 'mmol/L');
+                const isBunMmol = (labUnits.BUN === 'mmol/L');
                 const isEtohMmol = (labUnits.EtOH === 'mmol/L');
 
                 const gluTerm = isGluMmol ? Glu : (Glu / 18);
@@ -1816,19 +1841,23 @@
                 sol.uagSign = sol.uagVal >= 0 ? 'positive' : 'negative';
 
                 if (hasNAGMA) {
-                    if (sol.uagSign === 'positive') {
+                    // UAG can't be trusted with ketones (unmeasured anions) in urine or a low urine Na⁺
+                    sol.uagUnreliableReason = (Ket === 'pos') ? 'ketones in the urine' : (UNa < 20 ? 'Urine Na⁺ < 20' : '');
+                    if (sol.uagUnreliableReason) {
+                        sol.rtaStatus = 'UAG Unreliable';
+                    } else if (sol.uagSign === 'positive') {
                         if (K !== null && K > 5.0) {
                             sol.rtaStatus = 'Type 4 RTA (Hypoaldosteronism)';
                         } else {
                             sol.rtaStatus = 'Distal RTA (Type 1)';
                         }
                     } else {
-                        // Negative UAG in NAGMA: Diarrhea vs Proximal RTA Type 2
-                        if (UpH !== null && UpH < 5.3 && K !== null && K < 3.5 && UNa > 40) {
-                            // Default negative UAG with low HCO3 to GI Loss unless specific Proximal RTA context
-                            sol.rtaStatus = 'GI Loss (Diarrhea / Laxatives) - No RTA';
+                        // Negative UAG: GI loss vs Proximal RTA — the history decides
+                        if (activeCaseNegUagCause) {
+                            sol.rtaStatus = activeCaseNegUagCause;
                         } else {
                             sol.rtaStatus = 'GI Loss (Diarrhea / Laxatives) - No RTA';
+                            sol.rtaAccept = ['GI Loss (Diarrhea / Laxatives) - No RTA', 'Proximal RTA (Type 2)'];
                         }
                     }
                     sol.reasoningSteps.push(`• <b>Step 4B (Urine Anion Gap):</b> (UNa ${UNa} + UK ${UK}) − UCl ${UCl} = <b>${sol.uagVal} (${sol.uagSign.toUpperCase()})</b> → <b>${sol.rtaStatus}</b>.`);
@@ -1839,24 +1868,27 @@
 
             // 6. Build Final Diagnosis Lines (Step 5)
             const disorders = [];
+            const prim = sol.primaryDisorder;
+            // Respiratory or alkalotic primary disorders are always listed first
+            if (prim && prim !== 'Metabolic Acidosis' && prim !== 'Normal / Mixed Normal pH') {
+                disorders.push(prim);
+            }
             if (sol.agType === 'HAGMA') {
                 disorders.push('High Anion Gap Metabolic Acidosis (HAGMA)');
                 if (sol.deltaInterp === 'HAGMA + NAGMA (< 1)') {
                     disorders.push('Concurrent Normal Anion Gap Metabolic Acidosis (NAGMA, Δ/Δ < 1)');
-                } else if (sol.deltaInterp === 'HAGMA + Metabolic Alkalosis (> 2)') {
+                } else if (sol.deltaInterp === 'HAGMA + Metabolic Alkalosis (> 2)' && !disorders.some(d => d.includes('Metabolic Alkalosis'))) {
                     disorders.push('Concurrent Metabolic Alkalosis (Δ/Δ > 2)');
                 }
             } else if (sol.agType === 'NAGMA') {
                 disorders.push('Normal Anion Gap Metabolic Acidosis (NAGMA)');
-            } else if (sol.primaryDisorder && sol.primaryDisorder !== 'Metabolic Acidosis') {
-                disorders.push(sol.primaryDisorder);
             }
 
             if (sol.secondDisorder && sol.secondDisorder !== 'None') {
                 if (!disorders.some(d => d.includes(sol.secondDisorder.replace('Concurrent ', '')))) {
                     disorders.push(sol.secondDisorder);
                 }
-            } else if (sol.compStatus === 'compensated' && sol.primaryDisorder) {
+            } else if (sol.compStatus === 'expected' && prim && prim !== 'Normal / Mixed Normal pH') {
                 disorders.push(`Appropriate Compensation`);
             }
 
@@ -1864,20 +1896,29 @@
                 disorders.push('Elevated Serum Osmolar Gap (> 10, suspect Toxic Alcohol ingestion)');
             }
 
+            if (disorders.length === 0) {
+                disorders.push('No acid-base disorder detected ✨');
+            }
+
             sol.finalDisordersList = disorders;
 
             // RTA Line
             if (!hasNAGMA) {
                 sol.finalRtaText = 'RTA Absent (No Normal Anion Gap Metabolic Acidosis present)';
+            } else if (sol.uagVal === null) {
+                sol.finalRtaText = '🧪 NAGMA present — enter Urine Na⁺, K⁺ and Cl⁻ to check for RTA';
+            } else if (sol.rtaStatus === 'UAG Unreliable') {
+                sol.finalRtaText = `⚠️ Urine AG can't be used here (${sol.uagUnreliableReason}) — use the history (e.g. diarrhea) or the Urine Osmolar Gap to find the NAGMA cause`;
             } else if (sol.rtaStatus === 'Distal RTA (Type 1)') {
                 sol.finalRtaText = `RTA Present: Classic Distal RTA (Type 1) — Positive Urine AG (${sol.uagVal}), impaired distal H⁺ excretion (Urine pH ${UpH ?? '>5.5'}), Hypokalemia (K⁺ ${K ?? 'low'})`;
             } else if (sol.rtaStatus === 'Type 4 RTA (Hypoaldosteronism)') {
                 sol.finalRtaText = `RTA Present: Distal RTA Type 4 (Hypoaldosteronism) — Positive Urine AG (${sol.uagVal}) + Hyperkalemia (K⁺ ${K})`;
             } else if (sol.rtaStatus === 'Proximal RTA (Type 2)') {
-                sol.finalRtaText = `RTA Present: Proximal RTA (Type 2) — Negative Urine AG (${sol.uagVal}), intact distal acidification (Urine pH < 5.3)`;
+                sol.finalRtaText = `RTA Present: Proximal RTA (Type 2) — Negative Urine AG (${sol.uagVal}), intact distal acidification (Urine pH ${UpH ?? '< 5.5'}) + Fanconi clues / culprit drug in the history`;
             } else {
                 const laxNote = (UK !== null && UK < 20) ? ' (Urine K⁺ < 20 suggests laxative abuse)' : '';
-                sol.finalRtaText = `RTA Absent — NAGMA with Negative Urine AG (${sol.uagVal ?? '--'}) indicates intact renal NH₄⁺ excretion (Extrarenal GI Bicarb loss: Diarrhea${laxNote})`;
+                const proxNote = sol.rtaAccept ? ' — 🕵️ if the history shows Fanconi clues or acetazolamide / topiramate / tenofovir, think Proximal RTA (Type 2) instead' : '';
+                sol.finalRtaText = `RTA Absent — NAGMA with Negative Urine AG (${sol.uagVal}) indicates intact renal NH₄⁺ excretion (Extrarenal GI Bicarb loss: Diarrhea${laxNote})${proxNote}`;
             }
 
             return sol;
@@ -1979,6 +2020,7 @@
             clearFeedbackBadges();
 
             const banner = document.getElementById('caseBanner');
+            activeCaseNegUagCause = (caseKey && PRESET_CASES[caseKey] && PRESET_CASES[caseKey].negUagCause) || null;
             if (!caseKey || !PRESET_CASES[caseKey]) {
                 banner.classList.add('hidden');
                 onLabChange();
@@ -2043,7 +2085,7 @@
                 scoreBanner.classList.remove('hidden');
                 document.getElementById('scoreEmoji').textContent = '⚠️';
                 document.getElementById('scoreTitle').textContent = 'Please enter Lab Values or select a Preset Case first!';
-                document.getElementById('scoreSubtitle').textContent = 'Choose one of the 8 clinical cases in the top bar to test yourself.';
+                document.getElementById('scoreSubtitle').textContent = 'Choose one of the 9 clinical cases in the top bar to test yourself.';
                 return;
             }
 
@@ -2088,7 +2130,7 @@
                 isCompStatusOk,
                 isCompStatusOk
                     ? `Measured value (${sol.compMeasuredVal}) is correctly classified.`
-                    : `Measured is <b>${sol.compMeasuredVal}</b> vs expected <b>${sol.expCompRangeText}</b> → Select <b>${sol.compStatus.toUpperCase()}</b>.`
+                    : `Measured is <b>${sol.compMeasuredVal}</b> vs expected <b>${sol.expCompRangeText}</b> → Select <b>${COMP_LABELS[sol.compStatus]}</b>.`
             );
 
             // 4. Check 2nd Disorder from Compensation
@@ -2146,8 +2188,8 @@
                     : `Corrected AG is ${sol.correctedAG} (cutoff >12) → Right answer: <b>${sol.agType}</b>.`
             );
 
-            // 8. Check Delta-Delta if HAGMA
-            if (sol.agType === 'HAGMA') {
+            // 8. Check Delta-Delta if HAGMA (only when HCO₃⁻ actually fell)
+            if (sol.agType === 'HAGMA' && sol.deltaRatio !== null) {
                 const elDD = document.getElementById('user_deltaRatio');
                 const userDD = getNum('user_deltaRatio');
                 const isDDOk = userDD !== null && Math.abs(userDD - sol.deltaRatio) <= 0.25;
@@ -2173,7 +2215,10 @@
                         : `Ratio is ${sol.deltaRatio} → Right answer: <b>${sol.deltaInterp}</b>.`
                 );
 
-                // Check Osmolar Gap
+            }
+
+            // Check Osmolar Gap (only if HAGMA and measured Osm entered)
+            if (sol.agType === 'HAGMA' && sol.osmGap !== null) {
                 const elOsmGap = document.getElementById('user_osmGap');
                 const userOsmGap = getNum('user_osmGap');
                 const elOsmSt = document.getElementById('user_osmStatus');
@@ -2191,7 +2236,7 @@
 
             // 9. Check Urine AG & RTA if NAGMA is present
             const hasNAGMA = (sol.agType === 'NAGMA') || (sol.deltaInterp === 'HAGMA + NAGMA (< 1)');
-            if (hasNAGMA) {
+            if (hasNAGMA && sol.uagVal !== null) {
                 const elUAG = document.getElementById('user_uagVal');
                 const userUAG = getNum('user_uagVal');
                 const isUAGOk = userUAG !== null && Math.abs(userUAG - sol.uagVal) <= 1.0;
@@ -2219,15 +2264,16 @@
                 );
 
                 const elRTA = document.getElementById('user_rtaStatus');
-                const isRTAOk = elRTA.value === sol.rtaStatus;
+                const rtaOk = sol.rtaAccept || [sol.rtaStatus];
+                const isRTAOk = rtaOk.includes(elRTA.value);
                 totalChecks++; if (isRTAOk) correctCount++;
                 markFeedback(
                     'fb_rtaStatus',
                     elRTA,
                     isRTAOk,
                     isRTAOk
-                        ? `${sol.rtaStatus}.`
-                        : `Right answer: <b>${sol.rtaStatus}</b>.`
+                        ? `${elRTA.value}.${sol.rtaAccept ? ' (Negative UAG → GI loss or Proximal RTA: the history decides 🕵️)' : ''}`
+                        : `Right answer: <b>${rtaOk.join('</b> or <b>')}</b>.`
                 );
             }
 
@@ -2283,6 +2329,7 @@
         function clearAll() {
             document.getElementById('caseSelector').value = '';
             document.getElementById('caseBanner').classList.add('hidden');
+            activeCaseNegUagCause = null;
             const labIds = [
                 'lab_pH', 'lab_HCO3', 'lab_CO2', 'lab_Na', 'lab_K', 'lab_Cl',
                 'lab_Alb', 'lab_Osm', 'lab_Glu', 'lab_BUN', 'lab_EtOH', 'lab_Lac',
@@ -2325,6 +2372,11 @@
                                 <p class="text-xs mt-1">• If <b>↑ HCO₃⁻ (&gt;26)</b> ⇒ <b>Metabolic Alkalosis</b></p>
                                 <p class="text-xs">• If <b>↓ pCO₂ (&lt;35)</b> ⇒ <b>Respiratory Alkalosis</b></p>
                             </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs">
+                            <b>⚖️ Normal pH (7.35–7.45) but abnormal HCO₃⁻ / pCO₂?</b> Look at which side of <b>7.40</b> it leans to:
+                            <p class="mt-1">• <b>&lt; 7.40</b> → the <b>acid</b>-making change is primary (↓ HCO₃⁻ or ↑ pCO₂)</p>
+                            <p>• <b>&gt; 7.40</b> → the <b>alkali</b>-making change is primary (↑ HCO₃⁻ or ↓ pCO₂)</p>
                         </div>
                         <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs">
                             <b>💡 Pro Tip:</b> Even if pH is normal (7.35–7.45), there can still be a mixed acid-base disorder (for example, HAGMA + Metabolic Alkalosis in DKA with vomiting). Always check the Anion Gap in Step 3!
@@ -2370,6 +2422,15 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-center">
+                            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200"><div class="text-lg">✔️</div><b>As expected (± 2)</b><br>Compensation only — no 2nd disorder</div>
+                            <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200"><div class="text-lg">⬆️</div><b>Higher than expected</b><br>pCO₂ high → + Resp Acidosis<br>HCO₃⁻ high → + Met Alkalosis</div>
+                            <div class="p-2.5 rounded-xl bg-sky-50 border border-sky-200"><div class="text-lg">⬇️</div><b>Lower than expected</b><br>pCO₂ low → + Resp Alkalosis<br>HCO₃⁻ low → + Met Acidosis</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs">
+                            <b>🚫 The body never over-compensates.</b> Compensation can't bring pH all the way back (or past) normal — so any value outside the expected range means a <b>2nd disorder</b>.
+                        </div>
                     </div>
                 `
             },
@@ -2404,11 +2465,11 @@
                     <div class="space-y-4">
                         <!-- Image 5 Core Concept of Delta/Delta -->
                         <div class="p-4 rounded-2xl bg-purple-50 border-2 border-purple-200 space-y-2">
-                            <h4 class="font-cute font-bold text-purple-950 text-base">The Core Concept of Δ/Δ = (Measured AG − 12) / (24 − Serum HCO₃⁻)</h4>
+                            <h4 class="font-cute font-bold text-purple-950 text-base">The Core Concept of Δ/Δ = (Corrected AG − 12) / (24 − Serum HCO₃⁻)</h4>
                             <p class="text-xs italic text-purple-900">"Did the bicarbonate drop by the exact same amount that the anion gap went up?"</p>
                             <p class="text-xs text-slate-700">Normally, when a strong unmeasured acid enters the blood, it dissociates, donates H⁺, and consumes HCO₃⁻ on a <b>1:1 ratio</b>. If your AG goes up by 10, your HCO₃⁻ should drop by 10.</p>
                             <ul class="space-y-1.5 text-xs pt-1">
-                                <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• "Normal" Ratio (1 to 2):</b> Pure HAGMA with no hidden acid-base disturbances. <span class="text-slate-500">(Note: Pure lactic acidosis averages ~1.6 because of slow lactate clearance).</span></li>
+                                <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• "Normal" Ratio (1 to 2):</b> Pure HAGMA with no hidden acid-base disturbances. <span class="text-slate-500">(🏃 Pure lactic acidosis averages ~1.6: lactate stays in the blood 🩸 while part of the acid is buffered inside cells &amp; bone 🦴. 🔥 DKA sits nearer ~1 because ketones leak out in the urine.)</span></li>
                                 <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• High Ratio (&gt; 2):</b> AG went up a lot, but HCO₃⁻ didn't drop nearly enough ⇒ <b>Extra base is hiding in the system!</b> Points to <b>HAGMA + Concurrent Metabolic Alkalosis</b> (e.g., vomiting) or chronic respiratory acidosis.</li>
                                 <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• Low Ratio (&lt; 1):</b> HCO₃⁻ dropped way more than the AG rose ⇒ <b>Bicarb was lost or consumed by something else too!</b> Points to <b>HAGMA + Concurrent NAGMA</b> (like diarrhea or RTA).</li>
                             </ul>
@@ -2426,12 +2487,12 @@
                                         <tr><th class="p-2">Ingestion</th><th class="p-2">AG</th><th class="p-2">Osm Gap</th><th class="p-2">Classic Manifestations</th></tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-100">
-                                        <tr><td class="p-2 font-bold">Acetaminophen</td><td class="p-2">↑</td><td class="p-2">Nl</td><td class="p-2">Hepatitis (5-oxoproline acidosis)</td></tr>
+                                        <tr><td class="p-2 font-bold">Acetaminophen</td><td class="p-2">↑</td><td class="p-2">Nl</td><td class="p-2">💊 Chronic use (malnourished / septic) → <b>5-oxoproline acidosis</b> · Big acute overdose → hepatitis + lactic acidosis</td></tr>
                                         <tr><td class="p-2 font-bold">Salicylates (ASA)</td><td class="p-2">↑</td><td class="p-2">Nl</td><td class="p-2">Fever, tachycardia, tinnitus; <b>Met Acidosis + Resp Alkalosis</b> (CNS driven)</td></tr>
                                         <tr><td class="p-2 font-bold">Methanol</td><td class="p-2">↑</td><td class="p-2">↑</td><td class="p-2">De-icing fluid; ΔMS, <b>blurred vision, optic disc hyperemia/papilledema</b></td></tr>
-                                        <tr><td class="p-2 font-bold">Ethylene Glycol</td><td class="p-2">↑</td><td class="p-2">↑</td><td class="p-2">Antifreeze; ΔMS, AKI, hypoCa, <b>Ca-oxalate crystals</b> (fluoresce under UV/black light)</td></tr>
+                                        <tr><td class="p-2 font-bold">Ethylene Glycol</td><td class="p-2">↑</td><td class="p-2">↑</td><td class="p-2">Antifreeze; ΔMS, AKI, hypoCa, <b>Ca-oxalate crystals</b> · 🔦 urine may glow under UV from dye added to antifreeze (unreliable sign)</td></tr>
                                         <tr><td class="p-2 font-bold">Propylene Glycol</td><td class="p-2">Nl/↑</td><td class="p-2">↑</td><td class="p-2">IV solvent for phenytoin, lorazepam (&gt;10 mg); AKI, liver injury</td></tr>
-                                        <tr><td class="p-2 font-bold">Isopropyl Alcohol</td><td class="p-2">Nl</td><td class="p-2">↑</td><td class="p-2">Rubbing alcohol; Fruity breath (acetone), pancreatitis, <b>NO ketoacidosis (Normal AG!)</b></td></tr>
+                                        <tr><td class="p-2 font-bold">Isopropyl Alcohol</td><td class="p-2">Nl</td><td class="p-2">↑</td><td class="p-2">Rubbing alcohol; Fruity breath (acetone), hemorrhagic gastritis, <b>NO ketoacidosis (Normal AG!)</b></td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -2458,7 +2519,7 @@
                                 <div class="font-bold text-emerald-950 text-sm">Proximal RTA (Type 2)</div>
                                 <p><b>Defect:</b> Inability to reabsorb HCO₃⁻ in proximal tubule.</p>
                                 <p><b>Causes:</b> 1° Fanconi syndrome (pan-proximal failure: bicarb, phos, glucose, AA); 2° Multiple Myeloma (MM), amyloidosis; Meds: <b>Topiramate, Acetazolamide, Tenofovir</b>.</p>
-                                <p><b>Labs:</b> ↓ K⁺, <b>UAG Negative</b>, intact distal H⁺ excretion ⇒ <b>Very acidic urine (&lt; 5.3)</b>.</p>
+                                <p><b>Labs:</b> ↓ K⁺, <b>UAG Negative</b>, intact distal H⁺ excretion ⇒ <b>Acidic urine (&lt; 5.5)</b> once HCO₃⁻ is low. 🕵️ Clue: glucose in urine with normal blood sugar, ↓ phosphate.</p>
                                 <p><b>Tx:</b> Alkali + mild thiazide diuresis.</p>
                             </div>
                             <!-- Type 1 Distal -->
@@ -2473,13 +2534,14 @@
                             <div class="p-3 rounded-xl bg-purple-50 border border-purple-200 space-y-1">
                                 <div class="font-bold text-purple-950 text-sm">Distal RTA (Type 4 - Hypoaldo)</div>
                                 <p><b>Defect:</b> Aldosterone deficiency or resistance ⇒ Cannot reabsorb Na⁺ or excrete K⁺ and H⁺.</p>
-                                <p><b>Causes:</b> <b>Diabetes</b>, HIV, obstructive uropathy, graft rejection; Meds: <b>ACEi/ARB, Heparin, NSAIDs, K⁺-sparing diuretics</b>.</p>
-                                <p><b>Labs:</b> <b>↑ K⁺ (Hyperkalemia)</b> + <b>UAG Positive</b>.</p>
+                                <p><b>Causes:</b> <b>Diabetes</b>, HIV, obstructive uropathy, graft rejection; Meds: <b>ACEi/ARB, Heparin, NSAIDs, K⁺-sparing diuretics, Trimethoprim, Tacrolimus/Cyclosporine</b>.</p>
+                                <p><b>Labs:</b> <b>↑ K⁺ (Hyperkalemia)</b> + <b>UAG Positive</b> + urine pH usually <b>&lt; 5.5</b> (can still acidify — unlike Type 1).</p>
+                                <p><b>Tx:</b> Stop culprit drug, low-K⁺ diet, fludrocortisone or loop diuretic.</p>
                             </div>
                         </div>
 
                         <div class="p-3 rounded-xl bg-orange-50 border border-orange-300 text-xs">
-                            <b>⚠️ When UAG is NOT used:</b> In AKI, dehydration, or polyuria, UAG is unreliable. Use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion!
+                            <b>⚠️ When UAG is NOT used:</b> 🔥 Ketones (DKA) or other unmeasured anions in the urine (e.g. toluene) · 🧂 Urine Na⁺ &lt; 20 (volume depletion) · 🫘 AKI. Use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion!
                         </div>
                     </div>
                 `
@@ -2498,8 +2560,8 @@
                                     <li><b>D</b>iabetic Ketoacidosis (DKA)</li>
                                     <li><b>P</b>henformin, Paraldehyde, Propylene glycol</li>
                                     <li><b>I</b>soniazid (INH), Iron</li>
-                                    <li><b>L</b>actic acidosis (Δ/Δ ~ 1.6)</li>
-                                    <li><b>E</b>thanol, Ethylene glycol (antifreeze, Ca-Ox crystals)</li>
+                                    <li><b>L</b>actic acidosis (Δ/Δ ~ 1.6; incl. metformin)</li>
+                                    <li><b>E</b>thylene glycol (antifreeze, Ca-Ox crystals) <span class="text-slate-500">· 🍷 ethanol alone ✗ — only via alcoholic ketoacidosis</span></li>
                                     <li><b>S</b>alicylates (HAGMA + Respiratory Alkalosis)</li>
                                 </ul>
                             </div>
@@ -2517,11 +2579,11 @@
                         </div>
                         <div class="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-200 text-xs space-y-1">
                             <h4 class="font-cute font-bold text-emerald-950 text-sm">5-Step Checklist Summary</h4>
-                            <p><b>1. Primary Disorder:</b> Check pH, HCO₃⁻, and pCO₂.</p>
-                            <p><b>2. Compensation:</b> Winter's formula (Met Acid), 0.7 formula (Met Alk), or 1–4 / 2–5 rule (Resp).</p>
+                            <p><b>1. Primary Disorder:</b> Check pH, HCO₃⁻, and pCO₂. ⚖️ Normal pH? Side of 7.40 wins.</p>
+                            <p><b>2. Compensation:</b> Winter's formula (Met Acid), 0.7 formula (Met Alk), or 1–4 / 2–5 rule (Resp). Outside ± 2 → 2nd disorder.</p>
                             <p><b>3. Serum Anion Gap:</b> Always compare to Albumin-Corrected AG.</p>
                             <p><b>4A. If HAGMA:</b> Calculate Δ/Δ (&lt;1 +NAGMA, 1–2 Pure, &gt;2 +Met Alk) and Serum Osmolar Gap (&gt;10 Toxic Alcohol).</p>
-                            <p><b>4B. If NAGMA:</b> Calculate Urine Anion Gap (+ve = Distal RTA 1 or 4; −ve = Diarrhea or Proximal RTA 2).</p>
+                            <p><b>4B. If NAGMA:</b> Calculate Urine Anion Gap (+ve = Distal RTA 1 or 4; −ve = Diarrhea or Proximal RTA 2). ⚠️ Not with ketones in urine or Urine Na⁺ &lt; 20.</p>
                         </div>
                     </div>
                 `
