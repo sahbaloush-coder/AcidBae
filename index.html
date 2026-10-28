@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Acid-Base">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#FFE5EC">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Step-by-step interactive acid-base calculation and practice worksheet.">
+    <title>Kawaii Acid-Base Calculation & Practice Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Fredoka', 'sans-serif'],
+                        body: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        kawaii: {
+                            pink: '#FF85A2',
+                            lightPink: '#FFE5EC',
+                            blue: '#70D6FF',
+                            lightBlue: '#E2F6FF',
+                            mint: '#5CE1E6',
+                            lightMint: '#E6FCFD',
+                            green: '#7BF1A8',
+                            lightGreen: '#E8FCEF',
+                            yellow: '#FFD166',
+                            lightYellow: '#FFF8E6',
+                            purple: '#B388EB',
+                            lightPurple: '#F3EBFF',
+                            peach: '#FF9770',
+                            lightPeach: '#FFF0EA'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #FFFDF5;
+            background-image: 
+                radial-gradient(#FFE885 3.5px, transparent 3.5px),
+                radial-gradient(#FFF0A8 3.5px, transparent 3.5px),
+                repeating-linear-gradient(45deg, rgba(255, 243, 176, 0.35) 0px, rgba(255, 243, 176, 0.35) 14px, transparent 14px, transparent 28px);
+            background-size: 36px 36px, 36px 36px, 56px 56px;
+            background-position: 0 0, 18px 18px, 0 0;
+        }
+        h1, h2, h3, h4, .font-cute {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .kawaii-card {
+            border-width: 3px;
+            border-radius: 1.25rem;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.07);
+            transition: all 0.2s ease;
+        }
+        .kawaii-btn {
+            border-width: 2.5px;
+            border-radius: 0.9rem;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .kawaii-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+        }
+        .kawaii-input {
+            border-width: 2px;
+            border-radius: 0.75rem;
+            transition: all 0.15s ease;
+            text-align: center;
+            font-weight: 700;
+        }
+        .kawaii-input:focus {
+            outline: none;
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px rgba(255, 133, 162, 0.3);
+        }
+        .eq-slot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 3.2rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            border: 2px dashed #CBD5E1;
+            background: #F8FAFC;
+            color: #334155;
+        }
+        .eq-slot.filled {
+            border-style: solid;
+            border-color: #94A3B8;
+            background: #FFFFFF;
+            color: #0F172A;
+        }
+        .correct-field {
+            border-color: #22C55E !important;
+            background-color: #F0FDF4 !important;
+        }
+        .wrong-field {
+            border-color: #EF4444 !important;
+            background-color: #FEF2F2 !important;
+        }
+        /* Prevent mobile horizontal overflow from wide select dropdowns */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        select {
+            max-width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+    </style>
+</head>
+<body class="text-slate-800 pb-20">
+
+    <header class="sticky top-0 z-30 bg-gradient-to-r from-pink-100/95 via-amber-50/95 to-sky-100/95 backdrop-blur-md border-b-4 border-pink-300 shadow-sm px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <!-- Title & Mascot -->
+            <div class="flex items-center gap-3">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0">
+                    <!-- Kawaii Salt Shaker with Cloud & Star App Icon -->
+                    <svg viewBox="0 0 80 80" class="w-14 h-14 drop-shadow-sm">
+                        <defs>
+                            <linearGradient id="iconBgGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#D8F3FF"/>
+                                <stop offset="100%" stop-color="#B8E2FF"/>
+                            </linearGradient>
+                            <linearGradient id="goldBorderGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#FFE89E"/>
+                                <stop offset="50%" stop-color="#F2C14E"/>
+                                <stop offset="100%" stop-color="#D99B26"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Rounded Gold-Framed App Icon Box -->
+                        <rect x="3" y="3" width="74" height="74" rx="20" fill="url(#iconBgGrad)" stroke="url(#goldBorderGrad)" stroke-width="4.5"/>
+                        <rect x="6" y="6" width="68" height="68" rx="17" fill="none" stroke="#FFFDF2" stroke-width="1.5" opacity="0.8"/>
+                        <!-- Cute Glowing Star -->
+                        <path d="M23 15 L25.2 20.2 L30.8 20.7 L26.5 24.4 L27.8 29.9 L23 27 L18.2 29.9 L19.5 24.4 L15.2 20.7 L20.8 20.2 Z" fill="#FFF3B0" stroke="#C88A2B" stroke-width="2" stroke-linejoin="round"/>
+                        <!-- Cute Little Heart -->
+                        <path d="M62 15 C60.5 13 57.5 13.5 57.5 16 C57.5 18.5 62 21 62 21 C62 21 66.5 18.5 66.5 16 C66.5 13.5 63.5 13 62 15 Z" fill="#FFADC6" stroke="#B56576" stroke-width="1.8" stroke-linejoin="round"/>
+                        <!-- Kawaii Puff Cloud coming out of Shaker -->
+                        <path d="M40 35 C37 32, 38 26, 42 25 C43 20, 49 18, 54 20 C58 17, 65 19, 66 25 C71 26, 72 32, 68 36 C70 40, 66 45, 61 44 C57 47, 50 46, 47 43 C43 43, 39 40, 40 35 Z" fill="#FFFDF9" stroke="#9C6B3B" stroke-width="2.3" stroke-linejoin="round"/>
+                        <!-- Cloud Face & Sparkles -->
+                        <circle cx="51" cy="31" r="2" fill="#4A3525"/>
+                        <circle cx="59" cy="33" r="2" fill="#4A3525"/>
+                        <ellipse cx="48" cy="33" rx="2.2" ry="1.2" fill="#FF9EBB"/>
+                        <ellipse cx="62" cy="35" rx="2.2" ry="1.2" fill="#FF9EBB"/>
+                        <path d="M53.5 33 Q55 35.5 56.8 33.5" stroke="#4A3525" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                        <!-- Tilted Kawaii Salt Shaker -->
+                        <g transform="rotate(28 31 53)">
+                            <!-- Glass Body -->
+                            <path d="M20 39 L17 64 C17 68, 45 68, 45 64 L42 39 Z" fill="#E6F7FF" stroke="#8C5A2B" stroke-width="2.5" stroke-linejoin="round"/>
+                            <!-- White Salt Inside -->
+                            <path d="M19 44 L17.8 63 C17.8 66.5, 44.2 66.5, 44.2 63 L43 44 Z" fill="#FFFFFF"/>
+                            <!-- Shaker Cap -->
+                            <rect x="19" y="35" width="24" height="4.5" rx="2" fill="#F3D5B5" stroke="#8C5A2B" stroke-width="2.2"/>
+                            <path d="M21 35 C21 27, 41 27, 41 35 Z" fill="#FFF3E0" stroke="#8C5A2B" stroke-width="2.5"/>
+                            <!-- Salt Holes -->
+                            <circle cx="28" cy="31" r="1.2" fill="#8C5A2B"/>
+                            <circle cx="34" cy="31" r="1.2" fill="#8C5A2B"/>
+                            <!-- Cute Shaker Face -->
+                            <circle cx="26" cy="53" r="2.6" fill="#4A3525"/>
+                            <circle cx="36" cy="53" r="2.6" fill="#4A3525"/>
+                            <circle cx="25.2" cy="52.2" r="0.9" fill="#FFFFFF"/>
+                            <circle cx="35.2" cy="52.2" r="0.9" fill="#FFFFFF"/>
+                            <ellipse cx="22.5" cy="56.5" rx="2.6" ry="1.5" fill="#FF8FAB"/>
+                            <ellipse cx="39.5" cy="56.5" rx="2.6" ry="1.5" fill="#FF8FAB"/>
+                            <path d="M29.2 55.5 Q31 58.5 32.8 55.5" stroke="#4A3525" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+                        Acid-Base Calculation Form
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium">Step-by-step interactive worksheet with live equation slots & explanations</p>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <!-- Case Selector -->
+                <div class="flex items-center bg-slate-100 p-1 rounded-xl border-2 border-slate-200 w-full sm:w-auto">
+                    <span class="text-xs font-bold text-slate-600 px-2 shrink-0">📋 Load Case:</span>
+                    <select id="caseSelector" onchange="loadPresetCase(this.value)" class="bg-white text-xs sm:text-sm font-bold text-slate-700 rounded-lg px-2.5 py-1.5 border border-slate-300 focus:outline-none focus:border-pink-400 cursor-pointer w-full sm:w-auto min-w-0">
+                        <option value="">-- Custom / Select Preset Case --</option>
+                        <option value="case1">Case 1: Pure DKA (HAGMA)</option>
+                        <option value="case2">Case 2: DKA + Severe Vomiting (HAGMA + Met Alk)</option>
+                        <option value="case3">Case 3: DKA + Diarrhea (HAGMA + NAGMA)</option>
+                        <option value="case4">Case 4: Sjögren's Distal RTA Type 1 (NAGMA)</option>
+                        <option value="case5">Case 5: Diabetic Type 4 RTA (HyperK NAGMA)</option>
+                        <option value="case6">Case 6: Severe Diarrhea (NAGMA, -ve UAG)</option>
+                        <option value="case7">Case 7: Ethylene Glycol Poisoning (High Osm Gap HAGMA)</option>
+                        <option value="case8">Case 8: Chronic COPD + Thiazide Diuretic (Resp Acid + Met Alk)</option>
+                    </select>
+                </div>
+
+                <!-- Mode Toggle -->
+                <div class="flex items-center bg-pink-50 p-1 rounded-xl border-2 border-pink-200">
+                    <button id="btnTryMode" onclick="setMode('try')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-pink-500 text-white shadow-sm">
+                        ✏️ Try It Yourself
+                    </button>
+                    <button id="btnAutoMode" onclick="setMode('auto')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-pink-700 hover:bg-pink-100">
+                        ⚡ Auto-Solve
+                    </button>
+                </div>
+
+                <!-- Check Answers Button (Visible in Try Mode) -->
+                <button id="btnCheckAnswers" onclick="checkAllAnswers()" class="kawaii-btn bg-emerald-400 hover:bg-emerald-500 border-emerald-600 text-slate-900 font-bold text-xs sm:text-sm px-3.5 py-2 flex items-center gap-1.5">
+                    <span>✅ Check My Answers</span>
+                </button>
+
+                <!-- Reference Master Button -->
+                <button onclick="openModal('masterAlgo')" class="kawaii-btn bg-purple-100 hover:bg-purple-200 border-purple-400 text-purple-900 font-bold text-xs sm:text-sm px-3 py-2 flex items-center gap-1">
+                    <span>📖 Master Notes</span>
+                </button>
+
+                <!-- Clear All Button -->
+                <button onclick="clearAll()" class="kawaii-btn bg-slate-100 hover:bg-rose-100 border-slate-300 hover:border-rose-400 text-slate-700 hover:text-rose-700 font-bold text-xs sm:text-sm px-3 py-2">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
+
+        <!-- Case Clinical Vignette Banner (Shows when a preset case is loaded) -->
+        <div id="caseBanner" class="hidden kawaii-card bg-gradient-to-r from-amber-50 via-orange-50 to-pink-50 border-amber-300 p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">🏥</span>
+                    <div>
+                        <h3 id="caseTitle" class="font-bold text-amber-900 text-base sm:text-lg">Case Vignette</h3>
+                        <p id="caseVignette" class="text-sm text-slate-700 font-medium"></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+                    <span id="modeBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-200 text-amber-900 border border-amber-400">
+                        Fill the steps below!
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score / Feedback Banner (Shows when user clicks Check Answers) -->
+        <div id="scoreBanner" class="hidden kawaii-card bg-white border-emerald-400 p-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div id="scoreEmoji" class="text-3xl">🎉</div>
+                    <div>
+                        <h3 id="scoreTitle" class="font-bold text-lg text-slate-800">Practice Sheet Checked!</h3>
+                        <p id="scoreSubtitle" class="text-sm text-slate-600">Review the green ✅ and red ❌ boxes in each step below for detailed explanations.</p>
+                    </div>
+                </div>
+                <button onclick="setMode('auto')" class="kawaii-btn bg-sky-100 hover:bg-sky-200 border-sky-400 text-sky-900 text-xs font-bold px-3 py-2">
+                    ✨ Reveal Full Auto-Solve
+                </button>
+            </div>
+        </div>
+
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Left 9 Cols: VBG, Serum, Urine Inputs (Like Image 1 + Kawaii Icons from Image 2) -->
+            <div class="lg:col-span-9 kawaii-card bg-white border-slate-300 p-5 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-100 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🧪</span>
+                        <h2 class="text-lg font-bold text-slate-800">Patient Lab Values Input</h2>
+                        <span class="text-xs text-slate-500 font-medium">(Enter values or choose a preset case above — equations auto-fill!)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold text-slate-600 flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 cursor-pointer">
+                            <span>⏱️ Respiratory Onset (if Resp Primary):</span>
+                            <select id="lab_respChronicity" onchange="onLabChange()" class="bg-white border border-slate-300 rounded-lg px-2 py-0.5 text-xs font-bold text-slate-800">
+                                <option value="acute">Acute (&lt; 3 days)</option>
+                                <option value="chronic">Chronic (&gt; 3 days)</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ROW 1: VBG / ABG -->
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 bg-rose-50/70 p-3.5 rounded-2xl border-2 border-rose-200">
+                    <div class="w-24 shrink-0 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-rose-200 text-rose-800 font-bold flex items-center justify-center text-sm">🩸</span>
+                        <div>
+                            <div class="font-cute font-bold text-rose-900 text-base leading-none">VBG / ABG</div>
+                            <div class="text-[11px] text-rose-600 font-semibold">Blood Gas</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-3 gap-3 flex-1">
+                        <!-- pH -->
+                        <div class="bg-white p-2.5 rounded-xl border-2 border-rose-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-base" title="pH Scale">⚖️</span>
+                                <label class="text-xs font-bold text-slate-700">pH</label>
+                            </div>
+                            <input id="lab_pH" type="number" step="0.01" placeholder="7.40" oninput="onLabChange()" class="kawaii-input w-full bg-rose-50/50 border-rose-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">Nl: 7.35 - 7.45</span>
+                        </div>
+                        <!-- HCO3 (Kawaii Baking Soda) -->
+                        <div class="bg-white p-2.5 rounded-xl border-2 border-rose-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-base" title="Kawaii Baking Soda Bicarb">🧁</span>
+                                <label class="text-xs font-bold text-slate-700">HCO₃⁻</label>
+                            </div>
+                            <input id="lab_HCO3" type="number" step="0.1" placeholder="24" oninput="onLabChange()" class="kawaii-input w-full bg-rose-50/50 border-rose-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">Nl: 22 - 26 mEq/L</span>
+                        </div>
+                        <!-- pCO2 (Kawaii Lungs) with mmHg / kPa bottom-center toggle -->
+                        <div class="bg-white p-2.5 rounded-xl border-2 border-rose-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-base" title="Kawaii Lungs CO2">🫁</span>
+                                <label class="text-xs font-bold text-slate-700">pCO₂</label>
+                            </div>
+                            <input id="lab_CO2" type="number" step="0.1" placeholder="40" oninput="onLabChange()" class="kawaii-input w-full bg-rose-50/50 border-rose-300 text-slate-800 py-1 text-sm">
+                            <span id="hint_CO2" class="text-[10px] text-slate-400 mt-0.5">Nl: 35 - 45 mmHg</span>
+                            <button type="button" id="unitBtn_CO2" onclick="toggleLabUnit('CO2')" title="Tap to switch mmHg / kPa" class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-800 border border-rose-300 transition-colors">
+                                mmHg ⇄
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 2: SERUM -->
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 bg-sky-50/70 p-3.5 rounded-2xl border-2 border-sky-200">
+                    <div class="w-24 shrink-0 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-sky-200 text-sky-800 font-bold flex items-center justify-center text-sm">🧂</span>
+                        <div>
+                            <div class="font-cute font-bold text-sky-900 text-base leading-none">Serum</div>
+                            <div class="text-[11px] text-sky-600 font-semibold">Chemistry</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-5 gap-2.5 flex-1">
+                        <!-- Na (Kawaii Salt Shaker) -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <!-- Inline Mini Salt Shaker SVG -->
+                                <svg viewBox="0 0 32 32" class="w-4 h-4"><path d="M10 9 C10 4, 22 4, 22 9 Z" fill="#94A3B8"/><path d="M9 11 L7 26 C7 28, 25 28, 25 26 L23 11 Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="1.5"/><circle cx="13" cy="20" r="1.8" fill="#1E293B"/><circle cx="19" cy="20" r="1.8" fill="#1E293B"/><path d="M14 23 Q16 25 18 23" stroke="#1E293B" stroke-width="1.5" fill="none"/></svg>
+                                <label class="text-xs font-bold text-slate-700">Na⁺</label>
+                            </div>
+                            <input id="lab_Na" type="number" step="0.1" placeholder="140" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">135-145</span>
+                        </div>
+                        <!-- K (Kawaii Banana) -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm" title="Kawaii Banana Potassium">🍌</span>
+                                <label class="text-xs font-bold text-slate-700">K⁺</label>
+                            </div>
+                            <input id="lab_K" type="number" step="0.1" placeholder="4.0" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">3.5-5.0</span>
+                        </div>
+                        <!-- Cl (Kawaii Pool Drop) -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm" title="Chloride">💧</span>
+                                <label class="text-xs font-bold text-slate-700">Cl⁻</label>
+                            </div>
+                            <input id="lab_Cl" type="number" step="0.1" placeholder="104" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">98-106</span>
+                        </div>
+                        <!-- Albumin (Kawaii Egg) with g/dL / g/L bottom-center toggle -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm" title="Albumin (Egg White)">🥚</span>
+                                <label class="text-xs font-bold text-slate-700">Alb</label>
+                            </div>
+                            <input id="lab_Alb" type="number" step="0.1" placeholder="4.0" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span id="hint_Alb" class="text-[10px] text-slate-400 mt-0.5">Nl: 4.0 g/dL</span>
+                            <button type="button" id="unitBtn_Alb" onclick="toggleLabUnit('Alb')" title="Tap to switch g/dL or g/L" class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors">
+                                g/dL ⇄
+                            </button>
+                        </div>
+                        <!-- Measured Serum Osm -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🔮</span>
+                                <label class="text-xs font-bold text-slate-700">Meas. Osm</label>
+                            </div>
+                            <input id="lab_Osm" type="number" step="0.1" placeholder="290" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">mOsm/kg</span>
+                        </div>
+                        <!-- Glucose / BSL (Kawaii Candy) with mg/dL / mmol/L bottom-center toggle -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm" title="Blood Sugar">🍬</span>
+                                <label class="text-xs font-bold text-slate-700">Glu</label>
+                            </div>
+                            <input id="lab_Glu" type="number" step="0.1" placeholder="90" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span id="hint_Glu" class="text-[10px] text-slate-400 mt-0.5">Nl: 70-100 mg/dL</span>
+                            <button type="button" id="unitBtn_Glu" onclick="toggleLabUnit('Glu')" title="Tap to switch mg/dL or mmol/L" class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-900 border border-pink-300 transition-colors">
+                                mg/dL ⇄
+                            </button>
+                        </div>
+                        <!-- BUN with mg/dL / mmol/L bottom-center toggle -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🫘</span>
+                                <label class="text-xs font-bold text-slate-700">BUN</label>
+                            </div>
+                            <input id="lab_BUN" type="number" step="0.1" placeholder="14" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span id="hint_BUN" class="text-[10px] text-slate-400 mt-0.5">Nl: 7-20 mg/dL</span>
+                            <button type="button" id="unitBtn_BUN" onclick="toggleLabUnit('BUN')" title="Tap to switch mg/dL or mmol/L" class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-900 border border-pink-300 transition-colors">
+                                mg/dL ⇄
+                            </button>
+                        </div>
+                        <!-- Ethanol with mg/dL / mmol/L bottom-center toggle -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🍷</span>
+                                <label class="text-xs font-bold text-slate-700">EtOH</label>
+                            </div>
+                            <input id="lab_EtOH" type="number" step="0.1" placeholder="0" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span id="hint_EtOH" class="text-[10px] text-slate-400 mt-0.5">mg/dL (÷4.6)</span>
+                            <button type="button" id="unitBtn_EtOH" onclick="toggleLabUnit('EtOH')" title="Tap to switch mg/dL or mmol/L" class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 transition-colors">
+                                mg/dL ⇄
+                            </button>
+                        </div>
+                        <!-- Lactate -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🏃</span>
+                                <label class="text-xs font-bold text-slate-700">Lactate</label>
+                            </div>
+                            <input id="lab_Lac" type="number" step="0.1" placeholder="1.0" oninput="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">&lt; 2.0 mmol/L</span>
+                        </div>
+                        <!-- Ketones / Cr -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-sky-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🔥</span>
+                                <label class="text-xs font-bold text-slate-700">Ketones</label>
+                            </div>
+                            <select id="lab_Ket" onchange="onLabChange()" class="kawaii-input w-full bg-sky-50/50 border-sky-300 text-slate-800 py-1 text-xs">
+                                <option value="neg">Negative</option>
+                                <option value="pos">Positive (+)</option>
+                            </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5">Serum/Urine</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 3: URINE -->
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 bg-amber-50/70 p-3.5 rounded-2xl border-2 border-amber-200">
+                    <div class="w-24 shrink-0 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-amber-200 text-amber-800 font-bold flex items-center justify-center text-sm">🍋</span>
+                        <div>
+                            <div class="font-cute font-bold text-amber-900 text-base leading-none">Urine</div>
+                            <div class="text-[11px] text-amber-700 font-semibold">Electrolytes</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1">
+                        <!-- Urine Na -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-amber-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🧂</span>
+                                <label class="text-xs font-bold text-slate-700">Urine Na⁺</label>
+                            </div>
+                            <input id="lab_UNa" type="number" step="0.1" placeholder="40" oninput="onLabChange()" class="kawaii-input w-full bg-amber-50/50 border-amber-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">mEq/L</span>
+                        </div>
+                        <!-- Urine K -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-amber-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🍌</span>
+                                <label class="text-xs font-bold text-slate-700">Urine K⁺</label>
+                            </div>
+                            <input id="lab_UK" type="number" step="0.1" placeholder="25" oninput="onLabChange()" class="kawaii-input w-full bg-amber-50/50 border-amber-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">&lt;20 laxative</span>
+                        </div>
+                        <!-- Urine Cl -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-amber-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">💧</span>
+                                <label class="text-xs font-bold text-slate-700">Urine Cl⁻</label>
+                            </div>
+                            <input id="lab_UCl" type="number" step="0.1" placeholder="75" oninput="onLabChange()" class="kawaii-input w-full bg-amber-50/50 border-amber-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">NH₄⁺ surrogate</span>
+                        </div>
+                        <!-- Urine pH -->
+                        <div class="bg-white p-2 rounded-xl border-2 border-amber-200 flex flex-col items-center">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-sm">🧪</span>
+                                <label class="text-xs font-bold text-slate-700">Urine pH</label>
+                            </div>
+                            <input id="lab_UpH" type="number" step="0.1" placeholder="5.0" oninput="onLabChange()" class="kawaii-input w-full bg-amber-50/50 border-amber-300 text-slate-800 py-1 text-sm">
+                            <span class="text-[10px] text-slate-400 mt-0.5">&gt;5.5 in Type 1 RTA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right 3 Cols: Cute Normals & Kawaii Mascots Card (Matches Image 1 Top-Right Box) -->
+            <div class="lg:col-span-3 kawaii-card bg-white border-pink-300 p-5 space-y-4">
+                <div class="flex items-center justify-between border-b-2 border-pink-100 pb-2">
+                    <h3 class="font-cute font-bold text-lg text-pink-700 flex items-center gap-1.5">
+                        <span>🌟</span> Normals Box
+                    </h3>
+                    <button type="button" onclick="toggleConvBox()" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-full font-bold transition-colors flex items-center gap-1 shadow-sm">
+                        <span>🔄</span> <span id="convToggleBtnText">Conversions</span>
+                    </button>
+                </div>
+
+                <!-- Collapsible Conversion Factors Panel (From User's Handwritten Note) -->
+                <div id="convFactorsPanel" class="hidden bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-3 space-y-2.5 text-xs animate-fadeIn">
+                    <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+                        <span class="font-cute font-bold text-amber-950 flex items-center gap-1">
+                            <span>📐</span> Unit Conversions
+                        </span>
+                        <span class="text-[10px] font-bold text-amber-800 bg-yellow-200/80 px-1.5 py-0.5 rounded">SI ⇄ Conventional</span>
+                    </div>
+
+                    <!-- Highlighted Acid-Base Relevant Conversions -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between bg-yellow-200/90 px-2.5 py-1.5 rounded-xl border border-amber-300 font-bold text-slate-800">
+                            <span>🫁 VBG kPa ➔ mmHg</span>
+                            <span class="text-rose-600 font-mono">× 7.5</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-yellow-200/90 px-2.5 py-1.5 rounded-xl border border-amber-300 font-bold text-slate-800">
+                            <span>🍬 Glucose <span class="text-[10px] font-normal text-slate-600">(mmol ⇄ mg/dL)</span></span>
+                            <span class="text-rose-600 font-mono">× 18</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-yellow-200/90 px-2.5 py-1.5 rounded-xl border border-amber-300 font-bold text-slate-800">
+                            <span>🫘 BUN <span class="text-[10px] font-normal text-slate-600">(mmol ⇄ mg/dL)</span></span>
+                            <span class="text-rose-600 font-mono">× 2.8</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-xl border border-amber-200 font-bold text-slate-700">
+                            <span>🥚 Albumin <span class="text-[10px] font-normal text-slate-500">(g/dL ⇄ g/L)</span></span>
+                            <span class="text-pink-600 font-mono">× 10</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-xl border border-amber-200 font-bold text-slate-700">
+                            <span>🍷 EtOH <span class="text-[10px] font-normal text-slate-500">(mmol ⇄ mg/dL)</span></span>
+                            <span class="text-pink-600 font-mono">× 4.6</span>
+                        </div>
+                    </div>
+
+                    <!-- Expandable Extra Notebook Conversions (Cr, Uric Acid, Bili, Lipids, etc.) -->
+                    <div class="pt-1 border-t border-amber-200/80">
+                        <button type="button" onclick="toggleExtraConv()" class="w-full text-left text-[11px] font-bold text-amber-900 hover:text-pink-700 flex items-center justify-between py-0.5">
+                            <span>📒 More Notebook Factors (Cr, Uric, Lipids...)</span>
+                            <span id="extraConvArrow">▼</span>
+                        </button>
+                        <div id="extraConvList" class="hidden mt-1.5 space-y-1 pt-1 border-t border-dashed border-amber-200 text-[11px]">
+                            <div class="flex justify-between bg-yellow-100/90 px-2 py-1 rounded-lg font-bold">
+                                <span>🧪 Uric Acid <span class="font-normal text-[10px]">(mg/dL ➔ µmol/L)</span></span>
+                                <span class="text-rose-600 font-mono">× 60</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>💪 Creatinine <span class="font-normal text-[10px]">(mg/dL ➔ µmol/L)</span></span>
+                                <span class="text-pink-600 font-mono">× 88.4</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>💛 Bilirubin <span class="font-normal text-[10px]">(mg/dL ➔ µmol/L)</span></span>
+                                <span class="text-pink-600 font-mono">× 17.1</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>🫀 LDL-C <span class="font-normal text-[10px]">(mmol/L ➔ mg/dL)</span></span>
+                                <span class="text-pink-600 font-mono">× 38.67</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>🍔 Triglyceride <span class="font-normal text-[10px]">(mmol/L ➔ mg/dL)</span></span>
+                                <span class="text-pink-600 font-mono">× 88.4</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>🍼 Prolactin <span class="font-normal text-[10px]">(ng/mL ➔ mIU/L)</span></span>
+                                <span class="text-pink-600 font-mono">× 21.2</span>
+                            </div>
+                            <div class="flex justify-between bg-white/80 px-2 py-1 rounded-lg font-semibold">
+                                <span>⚡ Cortisol <span class="font-normal text-[10px]">(µg/dL ➔ nmol/L)</span></span>
+                                <span class="text-pink-600 font-mono">× 27.6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2.5 text-sm">
+                    <div class="flex items-center justify-between bg-rose-50 px-3 py-2 rounded-xl border border-rose-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-1.5">⚖️ pH</span>
+                        <span class="font-cute font-bold text-rose-700">7.40 <span class="text-xs font-normal text-slate-500">(7.35–7.45)</span></span>
+                    </div>
+                    <div class="flex items-center justify-between bg-sky-50 px-3 py-2 rounded-xl border border-sky-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-1.5">🧁 HCO₃⁻</span>
+                        <span class="font-cute font-bold text-sky-700">24 <span class="text-xs font-normal text-slate-500">(22–26)</span></span>
+                    </div>
+                    <div class="flex items-center justify-between bg-purple-50 px-3 py-2 rounded-xl border border-purple-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-1.5">🫁 pCO₂</span>
+                        <span class="font-cute font-bold text-purple-700">40 <span class="text-xs font-normal text-slate-500">(35–45)</span></span>
+                    </div>
+                    <div class="flex items-center justify-between bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-1.5">⚡ Anion Gap</span>
+                        <span class="font-cute font-bold text-emerald-700">12 <span class="text-xs font-normal text-slate-500">(8–12)</span></span>
+                    </div>
+                    <div class="flex items-center justify-between bg-amber-50 px-3 py-2 rounded-xl border border-amber-200">
+                        <span class="font-bold text-slate-700 flex items-center gap-1.5">🥚 Albumin</span>
+                        <span class="font-cute font-bold text-amber-700">4.0 g/dL</span>
+                    </div>
+                </div>
+
+                <!-- Cute Kawaii Salt & Banana Pair Illustration -->
+                <div class="bg-gradient-to-br from-pink-50 to-sky-50 rounded-2xl p-3 border-2 border-dashed border-pink-200 text-center">
+                    <div class="flex items-center justify-center gap-3 mb-1">
+                        <!-- Salt Shaker SVG -->
+                        <svg viewBox="0 0 64 64" class="w-12 h-12">
+                            <path d="M20 18 C20 10, 44 10, 44 18 Z" fill="#CBD5E1" stroke="#64748B" stroke-width="2.5"/>
+                            <path d="M18 22 L14 52 C14 56, 50 56, 50 52 L46 22 Z" fill="#E0F2FE" stroke="#38BDF8" stroke-width="2.5"/>
+                            <path d="M17 29 L15 51 C15 54, 49 54, 49 51 L47 29 Z" fill="#FFFFFF"/>
+                            <circle cx="25" cy="41" r="3.5" fill="#334155"/>
+                            <circle cx="39" cy="41" r="3.5" fill="#334155"/>
+                            <ellipse cx="20" cy="45" rx="3" ry="1.8" fill="#F472B6"/>
+                            <ellipse cx="44" cy="45" rx="3" ry="1.8" fill="#F472B6"/>
+                            <path d="M29 44 Q32 48 35 44" stroke="#334155" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        </svg>
+                        <span class="text-pink-500 text-lg animate-pulse">💖</span>
+                        <!-- Kawaii Banana SVG for Potassium -->
+                        <svg viewBox="0 0 64 64" class="w-12 h-12">
+                            <path d="M18 46 C28 54, 48 42, 50 18 C50 14, 45 12, 43 16 C39 32, 26 40, 18 40 Z" fill="#FACC15" stroke="#CA8A04" stroke-width="2.5" stroke-linejoin="round"/>
+                            <circle cx="35" cy="34" r="2.5" fill="#334155"/>
+                            <circle cx="43" cy="31" r="2.5" fill="#334155"/>
+                            <ellipse cx="32" cy="37" rx="2.2" ry="1.3" fill="#F472B6"/>
+                            <ellipse cx="46" cy="33" rx="2.2" ry="1.3" fill="#F472B6"/>
+                            <path d="M38 36 Q40 39 42 35" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-600">Salt (Na⁺) &amp; Banana (K⁺) Buddies!</p>
+                    <p class="text-[10px] text-slate-500">⚠️ Always use <b>measured Na⁺</b> (not corrected for glucose) in AG &amp; Osm calculations!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- STEP 1: PRIMARY DISORDER BOX (Pink Theme)                             -->
+        <!-- ===================================================================== -->
+        <section id="step1Box" class="kawaii-card bg-kawaii-lightPink border-pink-300 p-5 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b-2 border-pink-200 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-pink-500 text-white font-cute font-bold text-lg flex items-center justify-center shadow-sm shrink-0">1</span>
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-pink-950">Identify the Primary Disorder</h2>
+                        <p class="text-xs text-pink-800 font-medium">Look at pH first (Acidemia &lt; 7.35 vs Alkalemia &gt; 7.45), then check who matches the direction: HCO₃⁻ or pCO₂!</p>
+                    </div>
+                </div>
+                <button onclick="openModal('step1')" class="kawaii-btn bg-white hover:bg-pink-50 border-pink-400 text-pink-700 font-bold text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-1.5">
+                    <span>💡 Explain</span>
+                </button>
+            </div>
+
+            <!-- Live Equation / Visual Strip -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-white/90 rounded-2xl p-3.5 border-2 border-pink-200 flex items-center justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 mb-1">
+                            <span class="w-6 h-6 rounded-full bg-pink-600 text-white font-cute font-bold text-xs flex items-center justify-center">1A</span>
+                            <span class="text-xs font-bold uppercase text-pink-900 bg-pink-100 px-2.5 py-0.5 rounded-full">Check Blood pH</span>
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-0.5">
+                            pH = <span id="eq_pH" class="eq-slot">--</span>
+                        </div>
+                    </div>
+                    <span id="badge_pH" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Waiting...</span>
+                </div>
+
+                <div class="bg-white/90 rounded-2xl p-3.5 border-2 border-pink-200 flex items-center justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 mb-1">
+                            <span class="w-6 h-6 rounded-full bg-pink-600 text-white font-cute font-bold text-xs flex items-center justify-center">1B</span>
+                            <span class="text-xs font-bold uppercase text-pink-900 bg-pink-100 px-2.5 py-0.5 rounded-full">Metabolic (🧁 HCO₃⁻)</span>
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-0.5">
+                            HCO₃⁻ = <span id="eq_HCO3" class="eq-slot">--</span> <span class="text-xs text-slate-400">(Nl: 24)</span>
+                        </div>
+                    </div>
+                    <span id="badge_HCO3" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Waiting...</span>
+                </div>
+
+                <div class="bg-white/90 rounded-2xl p-3.5 border-2 border-pink-200 flex items-center justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 mb-1">
+                            <span class="w-6 h-6 rounded-full bg-pink-600 text-white font-cute font-bold text-xs flex items-center justify-center">1C</span>
+                            <span class="text-xs font-bold uppercase text-pink-900 bg-pink-100 px-2.5 py-0.5 rounded-full">Respiratory (🫁 pCO₂)</span>
+                        </div>
+                        <div class="text-base font-bold text-slate-800 mt-0.5">
+                            pCO₂ = <span id="eq_CO2" class="eq-slot">--</span> <span class="text-xs text-slate-400">(Nl: 40)</span>
+                        </div>
+                    </div>
+                    <span id="badge_CO2" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Waiting...</span>
+                </div>
+            </div>
+
+            <!-- Worksheet Line: Primary Disorder => _______ -->
+            <div class="bg-white rounded-2xl p-4 border-2 border-pink-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 flex-1 min-w-0 w-full">
+                    <span class="font-cute font-bold text-pink-900 text-base">• Primary Disorder ⇒</span>
+                    <select id="user_primaryDisorder" class="kawaii-input bg-pink-50/60 border-pink-300 text-slate-800 px-3 py-2 text-xs sm:text-sm w-full sm:w-72 max-w-full">
+                        <option value="">-- Select Primary Disorder --</option>
+                        <option value="Metabolic Acidosis">Metabolic Acidosis (↓ pH, ↓ HCO₃⁻)</option>
+                        <option value="Metabolic Alkalosis">Metabolic Alkalosis (↑ pH, ↑ HCO₃⁻)</option>
+                        <option value="Respiratory Acidosis">Respiratory Acidosis (↓ pH, ↑ pCO₂)</option>
+                        <option value="Respiratory Alkalosis">Respiratory Alkalosis (↑ pH, ↓ pCO₂)</option>
+                        <option value="Normal / Mixed Normal pH">Normal / Compensated Mixed</option>
+                    </select>
+                </div>
+                <div id="fb_primaryDisorder" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- STEP 2: COMPENSATION & 2ND DISORDER BOX (Sky Blue Theme)              -->
+        <!-- ===================================================================== -->
+        <section id="step2Box" class="kawaii-card bg-kawaii-lightBlue border-sky-300 p-5 sm:p-6 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-sky-200 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-sky-500 text-white font-cute font-bold text-lg flex items-center justify-center shadow-sm shrink-0">2</span>
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-sky-950">Check the Compensation</h2>
+                        <p class="text-xs text-sky-800 font-medium">Calculate Expected pCO₂ (for Metabolic) or Expected HCO₃⁻ (for Respiratory: Acute 1–2 vs Chronic 4–5 rule)</p>
+                    </div>
+                </div>
+                <button onclick="openModal('step2')" class="kawaii-btn bg-white hover:bg-sky-50 border-sky-400 text-sky-700 font-bold text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-1.5">
+                    <span>💡 Explain</span>
+                </button>
+            </div>
+
+            <!-- 2A: Dynamic Equation Card -->
+            <div class="bg-white/95 rounded-2xl p-4 border-2 border-sky-200 space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="inline-flex items-center gap-1.5">
+                        <span class="w-7 h-7 rounded-full bg-sky-700 text-white font-cute font-bold text-xs flex items-center justify-center">2A</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-900 bg-sky-100 px-3 py-1 rounded-full">
+                            Compensation Formula Auto-Filler
+                        </span>
+                    </div>
+                    <span id="compFormulaUsedBadge" class="text-xs font-bold text-slate-500">
+                        Winter's Formula (Metabolic Acidosis Default)
+                    </span>
+                </div>
+
+                <!-- Dynamic Equation Slots Display -->
+                <div id="compEquationsDisplay" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm sm:text-base font-bold text-slate-800 flex flex-wrap items-center gap-2">
+                    <span>Expected pCO₂ = (1.5 × HCO₃⁻ <span id="eq_comp_hco3" class="eq-slot">--</span>) + 8 ± 2</span>
+                    <span>⇒</span>
+                    <span class="text-sky-700">Target Range: <span id="eq_comp_range" class="eq-slot">--</span></span>
+                    <span class="text-slate-400">|</span>
+                    <span>Patient Measured: <span id="eq_comp_measured" class="eq-slot">--</span></span>
+                </div>
+
+                <!-- Quick Reference Mini-Table of the 4 Rules from Image 4 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+                    <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200">
+                        <div class="font-bold text-sky-900">1. Metabolic Acidosis</div>
+                        <div class="text-slate-600 mt-0.5">Exp CO₂ = (1.5 × HCO₃) + 8 ± 2</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200">
+                        <div class="font-bold text-sky-900">2. Metabolic Alkalosis</div>
+                        <div class="text-slate-600 mt-0.5">Exp CO₂ = 0.7 × (HCO₃ − 24) + 40 ± 2</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200">
+                        <div class="font-bold text-sky-900">3. Resp Acidosis (↑10 CO₂)</div>
+                        <div class="text-slate-600 mt-0.5">Acute: ↑1 HCO₃ | Chronic: ↑4 HCO₃</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200">
+                        <div class="font-bold text-sky-900">4. Resp Alkalosis (↓10 CO₂)</div>
+                        <div class="text-slate-600 mt-0.5">Acute: ↓2 HCO₃ | Chronic: ↓5 HCO₃</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-step 2b: Worksheet Fill-in (Matches Image 1: Compensation => ____, [✓] [Under] [Over] => 2nd Disorder?) -->
+            <div class="bg-white rounded-2xl p-4 border-2 border-sky-300 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span class="font-cute font-bold text-sky-950 text-base">• Expected Compensation Center Value ⇒</span>
+                        <input id="user_expCompVal" type="number" step="0.1" placeholder="e.g. 23" class="kawaii-input w-28 bg-sky-50 border-sky-300 text-slate-800 py-1.5 text-sm">
+                        <span class="text-xs text-slate-500 font-semibold">(± 2 range allowed)</span>
+                    </div>
+                    <div id="fb_expCompVal" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-cute font-bold text-sky-950 text-sm sm:text-base">• Compensation Status:</span>
+                        <!-- Radio Pills matching Image 1: ✓ , Under , Over -->
+                        <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
+                            <input type="radio" name="user_compStatus" value="compensated" class="accent-sky-600 w-4 h-4">
+                            <span>✔️ Appropriately Compensated</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
+                            <input type="radio" name="user_compStatus" value="under" class="accent-sky-600 w-4 h-4">
+                            <span>⭕ Under-compensated / Higher CO₂</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-sky-200 bg-sky-50/50 cursor-pointer hover:bg-sky-100 font-bold text-xs sm:text-sm">
+                            <input type="radio" name="user_compStatus" value="over" class="accent-sky-600 w-4 h-4">
+                            <span>⭕ Over-compensated / Lower CO₂</span>
+                        </label>
+                    </div>
+                    <div id="fb_compStatus" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto min-w-0">
+                        <span class="font-cute font-bold text-sky-950 text-sm sm:text-base">⇒ 2nd Disorder from Compensation?</span>
+                        <select id="user_secondDisorder" class="kawaii-input bg-sky-50 border-sky-300 text-slate-800 px-3 py-1.5 text-xs sm:text-sm w-full sm:w-80 max-w-full">
+                            <option value="">-- Select if 2nd Disorder Present --</option>
+                            <option value="None">None (Pure / Appropriately Compensated)</option>
+                            <option value="Concurrent Respiratory Acidosis">Concurrent Respiratory Acidosis (pCO₂ higher than expected)</option>
+                            <option value="Concurrent Respiratory Alkalosis">Concurrent Respiratory Alkalosis (pCO₂ lower than expected)</option>
+                            <option value="Concurrent Metabolic Alkalosis">Concurrent Metabolic Alkalosis (HCO₃⁻ higher than expected)</option>
+                            <option value="Concurrent Metabolic Acidosis">Concurrent Metabolic Acidosis (HCO₃⁻ lower than expected)</option>
+                        </select>
+                    </div>
+                    <div id="fb_secondDisorder" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- STEP 3: SERUM ANION GAP & ALBUMIN CORRECTION (Mint / Green Theme)     -->
+        <!-- ===================================================================== -->
+        <section id="step3Box" class="kawaii-card bg-kawaii-lightGreen border-emerald-300 p-5 sm:p-6 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-emerald-200 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-emerald-500 text-white font-cute font-bold text-lg flex items-center justify-center shadow-sm shrink-0">3</span>
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-emerald-950">Serum Anion Gap (AGAP) &amp; Albumin Correction</h2>
+                        <p class="text-xs text-emerald-800 font-medium">Always calculate AGAP even if pH looks normal! Compare to Corrected AG for patient's albumin (in g/dL).</p>
+                    </div>
+                </div>
+                <button onclick="openModal('step3')" class="kawaii-btn bg-white hover:bg-emerald-50 border-emerald-400 text-emerald-700 font-bold text-xs sm:text-sm px-3.5 py-1.5 flex items-center gap-1.5">
+                    <span>💡 Explain</span>
+                </button>
+            </div>
+
+            <!-- 3A & 3B Equations -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- 3A: Measured Serum AG -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-emerald-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="w-7 h-7 rounded-full bg-emerald-800 text-white font-cute font-bold text-xs flex items-center justify-center">3A</span>
+                            <span class="text-xs font-bold uppercase text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">Measured AGAP</span>
+                        </div>
+                        <span class="text-xs text-slate-400 font-semibold">Normal: 8 – 12 mEq/L</span>
+                    </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 flex flex-wrap items-center gap-1.5">
+                        <span>AGAP = 🧂 Na⁺</span>
+                        <span id="eq_ag_na" class="eq-slot">--</span>
+                        <span>− ( 🧁 HCO₃⁻</span>
+                        <span id="eq_ag_hco3" class="eq-slot">--</span>
+                        <span>+ 💧 Cl⁻</span>
+                        <span id="eq_ag_cl" class="eq-slot">--</span>
+                        <span>) ⇒</span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-cute font-bold text-emerald-950 text-sm">Measured AG ⇒</span>
+                            <input id="user_measuredAG" type="number" step="0.1" placeholder="12" class="kawaii-input w-24 bg-emerald-50 border-emerald-300 text-slate-800 py-1 text-sm">
+                        </div>
+                        <div id="fb_measuredAG" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+                </div>
+
+                <!-- 3B: Albumin-Corrected AG -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-emerald-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="w-7 h-7 rounded-full bg-emerald-800 text-white font-cute font-bold text-xs flex items-center justify-center">3B</span>
+                            <span class="text-xs font-bold uppercase text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">Corrected AG (for 🥚 Albumin)</span>
+                        </div>
+                        <span class="text-[11px] text-rose-600 font-bold">Use g/dL (e.g. 3.5, not 35!)</span>
+                    </div>
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 flex flex-wrap items-center gap-1.5">
+                        <span>Corr AG = AG</span>
+                        <span id="eq_cag_ag" class="eq-slot">--</span>
+                        <span>+ [ 2.5 × ( 4.0 − 🥚 Alb</span>
+                        <span id="eq_cag_alb" class="eq-slot">--</span>
+                        <span>) ] ⇒</span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-cute font-bold text-emerald-950 text-sm">Corrected AG ⇒</span>
+                            <input id="user_correctedAG" type="number" step="0.1" placeholder="12" class="kawaii-input w-24 bg-emerald-50 border-emerald-300 text-slate-800 py-1 text-sm">
+                        </div>
+                        <div id="fb_correctedAG" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-step 3c: HAGMA vs NAGMA Radio Choice (Matches Image 1 bottom of AGAP) -->
+            <div class="bg-white rounded-2xl p-4 border-2 border-emerald-300 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="font-cute font-bold text-emerald-950 text-base">• Anion Gap Classification ⇒</span>
+                    <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-purple-200 bg-purple-50/60 cursor-pointer hover:bg-purple-100 font-bold text-sm text-purple-950">
+                        <input type="radio" name="user_agType" value="HAGMA" class="accent-purple-600 w-4 h-4">
+                        <span>🔥 HAGMA (Corrected AG &gt; 12)</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-amber-200 bg-amber-50/60 cursor-pointer hover:bg-amber-100 font-bold text-sm text-amber-950">
+                        <input type="radio" name="user_agType" value="NAGMA" class="accent-amber-600 w-4 h-4">
+                        <span>🍋 NAGMA (Met Acidosis with AG ≤ 12)</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 font-bold text-sm text-slate-700">
+                        <input type="radio" name="user_agType" value="No Acidosis / Normal AG" class="accent-slate-600 w-4 h-4">
+                        <span>✨ Normal AG (No Metabolic Acidosis)</span>
+                    </label>
+                </div>
+                <div id="fb_agType" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl"></div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- STEP 4: TWO PARALLEL WORKUP BRANCHES (HAGMA vs NAGMA)                 -->
+        <!-- ===================================================================== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+            <!-- BRANCH 4A: HAGMA WORKUP (Purple Theme) -->
+            <section id="step4ABox" class="kawaii-card bg-kawaii-lightPurple border-purple-300 p-5 sm:p-6 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-purple-200 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-9 h-9 rounded-full bg-purple-600 text-white font-cute font-bold text-base flex items-center justify-center shadow-sm shrink-0">4A</span>
+                        <div>
+                            <h2 class="text-lg font-bold text-purple-950">If HAGMA: Δ/Δ Ratio &amp; Osmolar Gap</h2>
+                            <p class="text-xs text-purple-800 font-medium">Increased hidden anion acid → check Δ/Δ and Osmolar Gap!</p>
+                        </div>
+                    </div>
+                    <button onclick="openModal('step4A')" class="kawaii-btn bg-white hover:bg-purple-50 border-purple-400 text-purple-700 font-bold text-xs px-3 py-1.5 flex items-center gap-1">
+                        <span>💡 Explain HAGMA &amp; Δ/Δ</span>
+                    </button>
+                </div>
+
+                <!-- 4A.1: Delta / Delta Ratio (Image 4 & Image 5 Core Concept) -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-purple-200 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="w-7 h-7 rounded-full bg-purple-800 text-white font-cute font-bold text-xs flex items-center justify-center">4A.1</span>
+                            <span class="text-xs font-bold uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-full">
+                                Delta-Delta (Δ/Δ = ΔAG / ΔHCO₃⁻)
+                            </span>
+                        </div>
+                        <span class="text-[11px] font-bold text-purple-700">1:1 Bicarb Buffer Check</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-700 flex flex-wrap items-center gap-2">
+                        <span>Δ/Δ =</span>
+                        <div class="inline-flex flex-col items-center px-2">
+                            <span class="border-b-2 border-slate-400 pb-0.5">Corr AG (<span id="eq_dd_ag" class="text-purple-700">--</span>) − 12</span>
+                            <span class="pt-0.5">24 − HCO₃⁻ (<span id="eq_dd_hco3" class="text-sky-700">--</span>)</span>
+                        </div>
+                        <span>=</span>
+                        <div class="inline-flex flex-col items-center px-2 bg-white rounded-lg border border-slate-200 py-0.5">
+                            <span id="eq_dd_num" class="border-b border-slate-300 text-purple-700">--</span>
+                            <span id="eq_dd_den" class="text-sky-700">--</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-cute font-bold text-purple-950 text-sm">• Calculated Δ/Δ Ratio ⇒</span>
+                            <input id="user_deltaRatio" type="number" step="0.1" placeholder="1.0" class="kawaii-input w-24 bg-purple-50 border-purple-300 text-slate-800 py-1 text-sm">
+                        </div>
+                        <div id="fb_deltaRatio" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto min-w-0">
+                            <span class="font-cute font-bold text-purple-950 text-sm">• Δ/Δ Interpretation ⇒</span>
+                            <select id="user_deltaInterp" class="kawaii-input bg-purple-50 border-purple-300 text-slate-800 px-2.5 py-1.5 text-xs sm:text-sm w-full sm:w-auto max-w-full">
+                                <option value="">-- Select Δ/Δ Meaning --</option>
+                                <option value="Pure HAGMA (1 to 2)">1 – 2 : Pure HAGMA (No hidden metabolic disorder)</option>
+                                <option value="HAGMA + NAGMA (< 1)">&lt; 1 : HAGMA + Concurrent NAGMA (Extra HCO₃⁻ lost)</option>
+                                <option value="HAGMA + Metabolic Alkalosis (> 2)">&gt; 2 : HAGMA + Concurrent Metabolic Alkalosis (Extra base hiding)</option>
+                                <option value="Not Applicable">Not Applicable (No HAGMA present)</option>
+                            </select>
+                        </div>
+                        <div id="fb_deltaInterp" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+                </div>
+
+                <!-- 4A.2: Serum Osmolar Gap -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-purple-200 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-1">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="w-7 h-7 rounded-full bg-purple-800 text-white font-cute font-bold text-xs flex items-center justify-center">4A.2</span>
+                            <span class="text-xs font-bold uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-full">
+                                Serum Osmolar Gap
+                            </span>
+                        </div>
+                        <span class="text-[11px] font-bold text-emerald-700">Positive if &gt; 10 (Toxic Alcohols!)</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 space-y-1">
+                        <div>Calc Osm = 2×Na(<span id="eq_osm_na" class="text-purple-700">--</span>) + Glu(<span id="eq_osm_glu" class="text-purple-700">--</span>)/18 + BUN(<span id="eq_osm_bun" class="text-purple-700">--</span>)/2.8 + EtOH(<span id="eq_osm_etoh" class="text-purple-700">--</span>)/4.6 = <span id="eq_osm_calc" class="eq-slot">--</span></div>
+                        <div class="text-[11px] text-slate-500">💡 Note: If Glucose/BUN are already entered in small mmol/L units (&lt;35), our calculator automatically adds them without dividing!</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                        <div class="flex items-center justify-between bg-purple-50/50 p-2 rounded-xl border border-purple-200">
+                            <span class="font-cute font-bold text-purple-950 text-xs">Osm Gap (Meas − Calc):</span>
+                            <input id="user_osmGap" type="number" step="0.1" placeholder="0" class="kawaii-input w-20 bg-white border-purple-300 text-slate-800 py-1 text-xs">
+                        </div>
+                        <div class="flex items-center justify-between bg-purple-50/50 p-2 rounded-xl border border-purple-200">
+                            <span class="font-cute font-bold text-purple-950 text-xs">Osm Gap Status:</span>
+                            <select id="user_osmStatus" class="kawaii-input bg-white border-purple-300 text-slate-800 px-2 py-1 text-xs">
+                                <option value="">-- Select --</option>
+                                <option value="Normal (<= 10)">Normal (≤ 10)</option>
+                                <option value="Elevated (> 10)">Elevated (&gt; 10)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="fb_osmStatus" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                </div>
+
+                <!-- 4A.3: Checklist of the 4 Main Hidden Anion Groups -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-purple-200 space-y-2">
+                    <div class="inline-flex items-center gap-1.5">
+                        <span class="w-7 h-7 rounded-full bg-purple-800 text-white font-cute font-bold text-xs flex items-center justify-center">4A.3</span>
+                        <span class="text-xs font-bold uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-full">Check the 4 Main Groups of Hidden Anions (MUDPILES)</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
+                        <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
+                            <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
+                            <span>🔥 <b>Ketones:</b> DKA, Starvation, Alcoholic ketoacidosis</span>
+                        </label>
+                        <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
+                            <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
+                            <span>🏃 <b>Lactic Acid:</b> Sepsis/Shock, Ischemia (pure LA Δ/Δ ~1.6)</span>
+                        </label>
+                        <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
+                            <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
+                            <span>🫘 <b>Renal Failure (Uremia):</b> Retained organic anions</span>
+                        </label>
+                        <label class="flex items-start gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-purple-50">
+                            <input type="checkbox" class="mt-0.5 accent-purple-600 rounded">
+                            <span>☠️ <b>Toxins:</b> Methanol (eye), Ethylene glycol (Ca-Ox crystals), ASA (Resp Alk), Propylene glycol</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BRANCH 4B: NAGMA & RTA WORKUP (Sunny Yellow/Orange Theme) -->
+            <section id="step4BBox" class="kawaii-card bg-kawaii-lightYellow border-amber-300 p-5 sm:p-6 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-amber-200 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-9 h-9 rounded-full bg-amber-500 text-white font-cute font-bold text-base flex items-center justify-center shadow-sm shrink-0">4B</span>
+                        <div>
+                            <h2 class="text-lg font-bold text-amber-950">If NAGMA: Urine AG &amp; RTA Workup</h2>
+                            <p class="text-xs text-amber-800 font-medium">Loss of bicarb (GI vs Kidneys) → Check Urine AG, Serum K⁺, and Urine pH!</p>
+                        </div>
+                    </div>
+                    <button onclick="openModal('step4B')" class="kawaii-btn bg-white hover:bg-amber-50 border-amber-400 text-amber-800 font-bold text-xs px-3 py-1.5 flex items-center gap-1">
+                        <span>💡 Explain NAGMA &amp; RTA</span>
+                    </button>
+                </div>
+
+                <!-- 4B.1: Urine Anion Gap (UAG) -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-amber-200 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-1">
+                        <div class="inline-flex items-center gap-1.5">
+                            <span class="w-7 h-7 rounded-full bg-amber-700 text-white font-cute font-bold text-xs flex items-center justify-center">4B.1</span>
+                            <span class="text-xs font-bold uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-full">
+                                Urine Anion Gap (UAG)
+                            </span>
+                        </div>
+                        <span class="text-[11px] font-bold text-amber-700">Cl⁻ = Surrogate for Urine NH₄⁺</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-700 flex flex-wrap items-center gap-1.5">
+                        <span>UAG = ( 🧂 UNa⁺ <span id="eq_uag_na" class="eq-slot">--</span> + 🍌 UK⁺ <span id="eq_uag_k" class="eq-slot">--</span> ) − 💧 UCl⁻ <span id="eq_uag_cl" class="eq-slot">--</span> ⇒</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-cute font-bold text-amber-950 text-sm">• Calculated UAG ⇒</span>
+                            <input id="user_uagVal" type="number" step="0.1" placeholder="-10" class="kawaii-input w-24 bg-amber-50 border-amber-300 text-slate-800 py-1 text-sm">
+                        </div>
+                        <div id="fb_uagVal" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+
+                    <!-- UAG Sign Radio -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="font-cute font-bold text-amber-950 text-xs sm:text-sm">• UAG Sign:</span>
+                            <label class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-amber-300 bg-amber-50/60 cursor-pointer text-xs font-bold">
+                                <input type="radio" name="user_uagSign" value="negative" class="accent-amber-600">
+                                <span>➖ Negative (&lt; 0: High UCl⁻ = GI Loss / Prox RTA)</span>
+                            </label>
+                            <label class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-amber-300 bg-amber-50/60 cursor-pointer text-xs font-bold">
+                                <input type="radio" name="user_uagSign" value="positive" class="accent-amber-600">
+                                <span>➕ Positive (&gt; 0: Low NH₄⁺ = Distal RTA 1 or 4)</span>
+                            </label>
+                        </div>
+                        <div id="fb_uagSign" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+                </div>
+
+                <!-- 4B.2: RTA & GI Differentiation Tree -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-amber-200 space-y-3">
+                    <div class="inline-flex items-center gap-1.5">
+                        <span class="w-7 h-7 rounded-full bg-amber-700 text-white font-cute font-bold text-xs flex items-center justify-center">4B.2</span>
+                        <span class="text-xs font-bold uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-full">
+                            Differentiate RTA vs GI Cause
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                        <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200 space-y-1">
+                            <div class="font-bold text-rose-900 flex items-center gap-1">➕ If UAG is POSITIVE (Always Distal!):</div>
+                            <ul class="list-disc list-inside text-slate-700 space-y-0.5">
+                                <li><b>↓/Nl K⁺ + Urine pH &gt; 5.5:</b> <span class="text-rose-700 font-bold">Distal RTA (Type 1)</span> (Sjögren, SLE, stones, AmphoB)</li>
+                                <li><b>↑ Serum K⁺ (Hyperkalemia):</b> <span class="text-rose-700 font-bold">Distal RTA (Type 4)</span> (Hypoaldo, DM, ACEi/ARB, NSAIDs)</li>
+                            </ul>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                            <div class="font-bold text-emerald-900 flex items-center gap-1">➖ If UAG is NEGATIVE (Intact Distal NH₄⁺):</div>
+                            <ul class="list-disc list-inside text-slate-700 space-y-0.5">
+                                <li><b>GI Bicarb Loss:</b> <span class="text-emerald-700 font-bold">Diarrhea</span> or Laxative abuse (Urine K⁺ &lt; 20)</li>
+                                <li><b>Urine pH &lt; 5.3 + Fanconi/MM/Meds:</b> <span class="text-emerald-700 font-bold">Proximal RTA (Type 2)</span> (Acetazolamide, Topiramate, Tenofovir)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto min-w-0">
+                            <span class="font-cute font-bold text-amber-950 text-sm">• NAGMA / RTA Cause ⇒</span>
+                            <select id="user_rtaStatus" class="kawaii-input bg-amber-50 border-amber-300 text-slate-800 px-3 py-1.5 text-xs sm:text-sm w-full sm:w-auto max-w-full">
+                                <option value="">-- Select RTA / NAGMA Status --</option>
+                                <option value="Absent (No NAGMA)">No NAGMA / RTA Absent</option>
+                                <option value="GI Loss (Diarrhea / Laxatives) - No RTA">NAGMA due to GI Loss (Diarrhea/Laxatives) — RTA Absent</option>
+                                <option value="Distal RTA (Type 1)">Distal RTA (Type 1) — Positive UAG, Urine pH &gt; 5.5, ↓K⁺</option>
+                                <option value="Proximal RTA (Type 2)">Proximal RTA (Type 2) — Negative UAG, Urine pH &lt; 5.3, ↓K⁺</option>
+                                <option value="Type 4 RTA (Hypoaldosteronism)">Distal RTA (Type 4 / Hypoaldo) — Positive UAG + Hyperkalemia ↑K⁺</option>
+                            </select>
+                        </div>
+                        <div id="fb_rtaStatus" class="hidden text-xs font-bold px-2.5 py-1 rounded-xl"></div>
+                    </div>
+                </div>
+
+                <!-- High-Yield Pearl Callout from Image 3 -->
+                <div class="bg-amber-100/80 border-2 border-amber-300 rounded-2xl p-3 text-xs text-amber-950 flex items-start gap-2.5">
+                    <span class="text-lg">⚠️</span>
+                    <div>
+                        <b>Clinical Pearl (When UAG is unreliable):</b> UAG is not used in AKI, dehydration, or polyuria. Instead, use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion (RTA)!
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- STEP 5: FINAL DIAGNOSIS SUMMARY BOX (Total Bottom of Sheet)           -->
+        <!-- ===================================================================== -->
+        <section id="step5Box" class="kawaii-card bg-gradient-to-br from-white via-pink-50/40 to-sky-50/40 border-slate-800 p-6 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b-2 border-slate-200 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-slate-800 text-white font-cute font-bold text-xl flex items-center justify-center shadow-sm">🏁</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Final Diagnosis Box</h2>
+                        <p class="text-xs text-slate-600 font-medium">Complete summary of all acid-base disorders &amp; RTA status</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="checkAllAnswers()" class="kawaii-btn bg-emerald-400 hover:bg-emerald-500 border-emerald-600 text-slate-900 font-bold text-xs px-3.5 py-2">
+                        ✅ Verify My Worksheet
+                    </button>
+                    <button onclick="setMode('auto')" class="kawaii-btn bg-pink-500 hover:bg-pink-600 border-pink-700 text-white font-bold text-xs px-3.5 py-2">
+                        ✨ Auto-Solve All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Two Required Lines: Line 1 = All Relevant Acid-Base Disorders, Line 2 = Presence/Absence of RTA -->
+            <div class="space-y-3">
+                <!-- Line 1: All Acid-Base Disorders -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-pink-300 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-pink-600 mb-1">
+                        Line 1: All Relevant Acid-Base Disorders (Primary + Compensation + Mixed/Hidden Disorders)
+                    </div>
+                    <div id="finalDxLine1" class="text-base sm:text-lg font-cute font-bold text-slate-800">
+                        Enter lab values above or select a case preset to generate the diagnosis...
+                    </div>
+                </div>
+
+                <!-- Line 2: Presence or Absence of RTA -->
+                <div class="bg-white rounded-2xl p-4 border-2 border-amber-300 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">
+                        Line 2: Renal Tubular Acidosis (RTA) Status &amp; Urine Workup
+                    </div>
+                    <div id="finalDxLine2" class="text-sm sm:text-base font-cute font-bold text-slate-800">
+                        RTA Status: Waiting for Serum/Urine electrolyte evaluation...
+                    </div>
+                </div>
+
+                <!-- Line 3: Clinical Summary & Reasoning Breakdown -->
+                <div class="bg-slate-50 rounded-2xl p-4 border-2 border-slate-200">
+                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                        Step-by-Step Automated Calculation Summary
+                    </div>
+                    <div id="finalDxReasoning" class="text-xs sm:text-sm text-slate-700 space-y-1 font-medium">
+                        • Fill in the form or click "Auto-Solve" to view the complete mathematical breakdown.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- EXPLANATION POP-UP MODAL (Covers all 5 Images' Pearls & Tables)       -->
+    <!-- ===================================================================== -->
+    <div id="explainModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="kawaii-card bg-white border-pink-400 max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden animate-fadeIn">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-pink-100 via-purple-100 to-sky-100 px-6 py-4 border-b-2 border-pink-200 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span id="modalIcon" class="text-2xl">💡</span>
+                    <h3 id="modalTitle" class="font-cute font-bold text-xl text-slate-800">Concept Explanation</h3>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-xl bg-white border-2 border-slate-300 hover:border-rose-400 text-slate-600 hover:text-rose-600 font-bold flex items-center justify-center">
+                    ✕
+                </button>
+            </div>
+            <!-- Modal Content -->
+            <div id="modalBody" class="p-6 overflow-y-auto space-y-4 text-sm text-slate-700 leading-relaxed">
+                <!-- Populated dynamically via JS -->
+            </div>
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end">
+                <button onclick="closeModal()" class="kawaii-btn bg-pink-500 hover:bg-pink-600 border-pink-700 text-white font-bold text-xs px-5 py-2">
+                    Got it! Back to Worksheet ✨
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current worksheet mode: 'try' or 'auto'
+        let currentMode = 'try';
+
+        // Track selected units for convertible lab inputs
+        const labUnits = {
+            CO2: 'mmHg',   // 'mmHg' or 'kPa' (× 7.5)
+            Alb: 'g/dL',   // 'g/dL' or 'g/L' (÷ 10)
+            Glu: 'mg/dL',  // 'mg/dL' or 'mmol/L' (× 18)
+            BUN: 'mg/dL',  // 'mg/dL' or 'mmol/L' (× 2.8)
+            EtOH: 'mg/dL'  // 'mg/dL' or 'mmol/L' (× 4.6)
+        };
+
+        function toggleConvBox() {
+            const panel = document.getElementById('convFactorsPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        function toggleExtraConv() {
+            const list = document.getElementById('extraConvList');
+            const arrow = document.getElementById('extraConvArrow');
+            list.classList.toggle('hidden');
+            arrow.textContent = list.classList.contains('hidden') ? '▼' : '▲';
+        }
+
+        function toggleLabUnit(field) {
+            const inputEl = document.getElementById('lab_' + field);
+            const btnEl = document.getElementById('unitBtn_' + field);
+            const hintEl = document.getElementById('hint_' + field);
+            const currentVal = getNum('lab_' + field);
+
+            if (field === 'CO2') {
+                if (labUnits.CO2 === 'mmHg') {
+                    labUnits.CO2 = 'kPa';
+                    btnEl.textContent = 'kPa ⇄';
+                    inputEl.placeholder = '5.3';
+                    hintEl.textContent = 'Nl: 4.7-6.0 kPa (×7.5)';
+                    if (currentVal !== null) inputEl.value = Number((currentVal / 7.5).toFixed(2));
+                } else {
+                    labUnits.CO2 = 'mmHg';
+                    btnEl.textContent = 'mmHg ⇄';
+                    inputEl.placeholder = '40';
+                    hintEl.textContent = 'Nl: 35 - 45 mmHg';
+                    if (currentVal !== null) inputEl.value = Number((currentVal * 7.5).toFixed(1));
+                }
+            } else if (field === 'Alb') {
+                if (labUnits.Alb === 'g/dL') {
+                    labUnits.Alb = 'g/L';
+                    btnEl.textContent = 'g/L ⇄';
+                    inputEl.placeholder = '40';
+                    hintEl.textContent = 'Nl: 40 g/L (÷10)';
+                    if (currentVal !== null) inputEl.value = Number((currentVal * 10).toFixed(0));
+                } else {
+                    labUnits.Alb = 'g/dL';
+                    btnEl.textContent = 'g/dL ⇄';
+                    inputEl.placeholder = '4.0';
+                    hintEl.textContent = 'Nl: 4.0 g/dL';
+                    if (currentVal !== null) inputEl.value = Number((currentVal / 10).toFixed(1));
+                }
+            } else if (field === 'Glu') {
+                if (labUnits.Glu === 'mg/dL') {
+                    labUnits.Glu = 'mmol/L';
+                    btnEl.textContent = 'mmol/L ⇄';
+                    inputEl.placeholder = '5.0';
+                    hintEl.textContent = 'Nl: 3.9-5.6 mmol/L';
+                    if (currentVal !== null) inputEl.value = Number((currentVal / 18).toFixed(1));
+                } else {
+                    labUnits.Glu = 'mg/dL';
+                    btnEl.textContent = 'mg/dL ⇄';
+                    inputEl.placeholder = '90';
+                    hintEl.textContent = 'Nl: 70-100 mg/dL';
+                    if (currentVal !== null) inputEl.value = Number((currentVal * 18).toFixed(0));
+                }
+            } else if (field === 'BUN') {
+                if (labUnits.BUN === 'mg/dL') {
+                    labUnits.BUN = 'mmol/L';
+                    btnEl.textContent = 'mmol/L ⇄';
+                    inputEl.placeholder = '5.0';
+                    hintEl.textContent = 'Nl: 2.5-7.1 mmol/L';
+                    if (currentVal !== null) inputEl.value = Number((currentVal / 2.8).toFixed(1));
+                } else {
+                    labUnits.BUN = 'mg/dL';
+                    btnEl.textContent = 'mg/dL ⇄';
+                    inputEl.placeholder = '14';
+                    hintEl.textContent = 'Nl: 7-20 mg/dL';
+                    if (currentVal !== null) inputEl.value = Number((currentVal * 2.8).toFixed(0));
+                }
+            } else if (field === 'EtOH') {
+                if (labUnits.EtOH === 'mg/dL') {
+                    labUnits.EtOH = 'mmol/L';
+                    btnEl.textContent = 'mmol/L ⇄';
+                    inputEl.placeholder = '0';
+                    hintEl.textContent = 'mmol/L (no ÷4.6)';
+                    if (currentVal !== null) inputEl.value = Number((currentVal / 4.6).toFixed(1));
+                } else {
+                    labUnits.EtOH = 'mg/dL';
+                    btnEl.textContent = 'mg/dL ⇄';
+                    inputEl.placeholder = '0';
+                    hintEl.textContent = 'mg/dL (÷4.6)';
+                    if (currentVal !== null) inputEl.value = Number((currentVal * 4.6).toFixed(0));
+                }
+            }
+            onLabChange();
+        }
+
+        function resetUnitsToDefault() {
+            if (labUnits.CO2 !== 'mmHg') toggleLabUnit('CO2');
+            if (labUnits.Alb !== 'g/dL') toggleLabUnit('Alb');
+            if (labUnits.Glu !== 'mg/dL') toggleLabUnit('Glu');
+            if (labUnits.BUN !== 'mg/dL') toggleLabUnit('BUN');
+            if (labUnits.EtOH !== 'mg/dL') toggleLabUnit('EtOH');
+        }
+
+        // Preset clinical cases covering the full spectrum of the user's notes
+        const PRESET_CASES = {
+            case1: {
+                title: "Case 1: Classic Diabetic Ketoacidosis (Pure HAGMA)",
+                vignette: "A 22-year-old with Type 1 Diabetes presents with polyuria, abdominal pain, and fruity breath. Serum ketones are strongly positive.",
+                labs: {
+                    pH: 7.22, HCO3: 10, CO2: 23, respChronicity: 'acute',
+                    Na: 136, K: 5.1, Cl: 102, Alb: 4.0, Osm: 304, Glu: 450, BUN: 28, EtOH: 0, Lac: 1.4, Ket: 'pos',
+                    UNa: 45, UK: 30, UCl: 95, UpH: 5.0
+                }
+            },
+            case2: {
+                title: "Case 2: DKA + Severe Vomiting (HAGMA + Concurrent Metabolic Alkalosis)",
+                vignette: "A 29-year-old with Type 1 DM presents after 2 days of intractable vomiting and missed insulin doses. Notice how high the Anion Gap went compared to the modest drop in HCO₃⁻ (Δ/Δ > 2)!",
+                labs: {
+                    pH: 7.38, HCO3: 18, CO2: 33, respChronicity: 'acute',
+                    Na: 138, K: 3.4, Cl: 90, Alb: 4.0, Osm: 300, Glu: 360, BUN: 28, EtOH: 0, Lac: 1.5, Ket: 'pos',
+                    UNa: 30, UK: 25, UCl: 65, UpH: 5.5
+                }
+            },
+            case3: {
+                title: "Case 3: DKA + Profuse Watery Diarrhea (HAGMA + Concurrent NAGMA)",
+                vignette: "A 35-year-old with gastroenteritis and Type 1 DM presents with both ketonemia and severe watery diarrhea. Notice how HCO₃⁻ dropped way more than the Anion Gap rose (Δ/Δ < 1)!",
+                labs: {
+                    pH: 7.15, HCO3: 8, CO2: 20, respChronicity: 'acute',
+                    Na: 138, K: 3.6, Cl: 110, Alb: 4.0, Osm: 298, Glu: 324, BUN: 18, EtOH: 0, Lac: 1.2, Ket: 'pos',
+                    UNa: 35, UK: 25, UCl: 90, UpH: 5.1
+                }
+            },
+            case4: {
+                title: "Case 4: Sjögren's Syndrome — Classic Distal RTA (Type 1)",
+                vignette: "A 34-year-old woman with dry eyes, dry mouth (Sjögren's), and recurrent calcium phosphate kidney stones presents with muscle weakness. She has NAGMA, hypokalemia, positive UAG, and urine pH > 5.5.",
+                labs: {
+                    pH: 7.28, HCO3: 14, CO2: 29, respChronicity: 'acute',
+                    Na: 140, K: 2.8, Cl: 116, Alb: 4.0, Osm: 288, Glu: 90, BUN: 14, EtOH: 0, Lac: 1.0, Ket: 'neg',
+                    UNa: 55, UK: 25, UCl: 60, UpH: 6.2
+                }
+            },
+            case5: {
+                title: "Case 5: Diabetic Nephropathy + ACE Inhibitor — Type 4 RTA (Hypoaldosteronism)",
+                vignette: "A 64-year-old man with long-standing diabetes on lisinopril and ibuprofen presents with mild hyperchloremic metabolic acidosis (NAGMA), hyperkalemia (K⁺ 5.8), and a positive Urine Anion Gap.",
+                labs: {
+                    pH: 7.31, HCO3: 17, CO2: 34, respChronicity: 'acute',
+                    Na: 137, K: 5.8, Cl: 110, Alb: 4.0, Osm: 286, Glu: 144, BUN: 22, EtOH: 0, Lac: 1.1, Ket: 'neg',
+                    UNa: 45, UK: 20, UCl: 50, UpH: 5.1
+                }
+            },
+            case6: {
+                title: "Case 6: Severe Acute Diarrhea (Extrarenal NAGMA, Negative UAG)",
+                vignette: "A 40-year-old traveler presents with 4 days of watery diarrhea. Kidneys are healthy and excreting massive NH₄⁺ (tracked by high Urine Cl⁻ → strongly negative UAG).",
+                labs: {
+                    pH: 7.26, HCO3: 14, CO2: 29, respChronicity: 'acute',
+                    Na: 138, K: 3.2, Cl: 114, Alb: 4.0, Osm: 285, Glu: 90, BUN: 14, EtOH: 0, Lac: 1.1, Ket: 'neg',
+                    UNa: 30, UK: 22, UCl: 85, UpH: 5.0
+                }
+            },
+            case7: {
+                title: "Case 7: Ethylene Glycol (Antifreeze) Poisoning — High Osmolar Gap HAGMA",
+                vignette: "A 48-year-old presents confused with flank pain and envelope-shaped calcium oxalate crystals in the urine that fluoresce under UV light. Measured Serum Osm is 335 mOsm/kg!",
+                labs: {
+                    pH: 7.18, HCO3: 10, CO2: 23, respChronicity: 'acute',
+                    Na: 140, K: 4.5, Cl: 104, Alb: 4.0, Osm: 335, Glu: 90, BUN: 14, EtOH: 0, Lac: 2.2, Ket: 'neg',
+                    UNa: 40, UK: 25, UCl: 70, UpH: 5.3
+                }
+            },
+            case8: {
+                title: "Case 8: Chronic COPD on Loop/Thiazide Diuretic (Chronic Resp Acidosis + Met Alkalosis)",
+                vignette: "A 68-year-old with severe chronic COPD (>3 days) was started on high-dose diuretics. His pCO₂ is 60, so Chronic Resp Acidosis expects HCO₃⁻ = 24 + 2×4 = 32. His actual HCO₃⁻ is 38 (concurrent Metabolic Alkalosis!).",
+                labs: {
+                    pH: 7.36, HCO3: 38, CO2: 60, respChronicity: 'chronic',
+                    Na: 139, K: 3.3, Cl: 91, Alb: 4.0, Osm: 288, Glu: 95, BUN: 16, EtOH: 0, Lac: 1.0, Ket: 'neg',
+                    UNa: 40, UK: 30, UCl: 70, UpH: 6.0
+                }
+            }
+        };
+
+        // Helper to read numeric input safely
+        function getNum(id) {
+            const el = document.getElementById(id);
+            if (!el || el.value === '') return null;
+            const v = parseFloat(el.value);
+            return isNaN(v) ? null : v;
+        }
+
+        // Helper to update equation slot spans
+        function setSlot(id, val, decimals = 1) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (val === null || val === undefined || val === '--' || isNaN(val)) {
+                el.textContent = '--';
+                el.classList.remove('filled');
+            } else {
+                el.textContent = typeof val === 'number' ? Number(val.toFixed(decimals)) : val;
+                el.classList.add('filled');
+            }
+        }
+
+        // Core Acid-Base Solver Engine (Computes Ground Truth from current Lab Inputs)
+        function computeAcidBaseSolution() {
+            const pH = getNum('lab_pH');
+            const HCO3 = getNum('lab_HCO3');
+            const rawCO2 = getNum('lab_CO2');
+            // Convert CO2 to mmHg if user entered kPa (× 7.5)
+            const CO2 = rawCO2 !== null ? (labUnits.CO2 === 'kPa' ? Number((rawCO2 * 7.5).toFixed(1)) : rawCO2) : null;
+            const chronicity = document.getElementById('lab_respChronicity').value;
+
+            const Na = getNum('lab_Na');
+            const K = getNum('lab_K');
+            const Cl = getNum('lab_Cl');
+            const rawAlb = getNum('lab_Alb');
+            // Convert Albumin to g/dL if user entered g/L (÷ 10) or accidentally typed > 10
+            let Alb = 4.0;
+            if (rawAlb !== null) {
+                Alb = (labUnits.Alb === 'g/L' || rawAlb > 10) ? Number((rawAlb / 10).toFixed(2)) : rawAlb;
+            }
+            const Osm = getNum('lab_Osm');
+            const Glu = getNum('lab_Glu') !== null ? getNum('lab_Glu') : (labUnits.Glu === 'mmol/L' ? 5.0 : 90);
+            const BUN = getNum('lab_BUN') !== null ? getNum('lab_BUN') : (labUnits.BUN === 'mmol/L' ? 5.0 : 14);
+            const EtOH = getNum('lab_EtOH') !== null ? getNum('lab_EtOH') : 0;
+            const Lac = getNum('lab_Lac');
+            const Ket = document.getElementById('lab_Ket').value;
+
+            const UNa = getNum('lab_UNa');
+            const UK = getNum('lab_UK');
+            const UCl = getNum('lab_UCl');
+            const UpH = getNum('lab_UpH');
+
+            const sol = {
+                hasGas: pH !== null && HCO3 !== null && CO2 !== null,
+                primaryDisorder: '',
+                compFormulaName: '',
+                expCompTarget: null,
+                expCompRangeText: '--',
+                compMeasuredVal: null,
+                compStatus: '',
+                secondDisorder: 'None',
+                measuredAG: null,
+                correctedAG: null,
+                agType: '',
+                deltaNum: null,
+                deltaDen: null,
+                deltaRatio: null,
+                deltaInterp: 'Not Applicable',
+                calcOsm: null,
+                osmGap: null,
+                osmStatus: 'Normal (<= 10)',
+                uagVal: null,
+                uagSign: '',
+                rtaStatus: 'Absent (No NAGMA)',
+                finalDisordersList: [],
+                finalRtaText: '',
+                reasoningSteps: []
+            };
+
+            // 1. Update Step 1 slots & badges
+            setSlot('eq_pH', pH, 2);
+            setSlot('eq_HCO3', HCO3, 1);
+            setSlot('eq_CO2', CO2, 1);
+
+            const badgePH = document.getElementById('badge_pH');
+            if (pH === null) {
+                badgePH.textContent = 'Waiting...';
+                badgePH.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
+            } else if (pH < 7.35) {
+                badgePH.textContent = '↓ Acidemia (<7.35)';
+                badgePH.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300';
+            } else if (pH > 7.45) {
+                badgePH.textContent = '↑ Alkalemia (>7.45)';
+                badgePH.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 border border-sky-300';
+            } else {
+                badgePH.textContent = 'Normal pH (7.35–7.45)';
+                badgePH.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+            }
+
+            const badgeHCO3 = document.getElementById('badge_HCO3');
+            if (HCO3 === null) {
+                badgeHCO3.textContent = 'Waiting...';
+                badgeHCO3.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
+            } else if (HCO3 < 22) {
+                badgeHCO3.textContent = '↓ Acidic (<22)';
+                badgeHCO3.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800';
+            } else if (HCO3 > 26) {
+                badgeHCO3.textContent = '↑ Basic (>26)';
+                badgeHCO3.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-800';
+            } else {
+                badgeHCO3.textContent = 'Normal (22–26)';
+                badgeHCO3.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800';
+            }
+
+            const badgeCO2 = document.getElementById('badge_CO2');
+            if (CO2 === null) {
+                badgeCO2.textContent = 'Waiting...';
+                badgeCO2.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
+            } else if (CO2 > 45) {
+                badgeCO2.textContent = '↑ Acidic (>45)';
+                badgeCO2.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800';
+            } else if (CO2 < 35) {
+                badgeCO2.textContent = '↓ Basic (<35)';
+                badgeCO2.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-800';
+            } else {
+                badgeCO2.textContent = 'Normal (35–45)';
+                badgeCO2.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800';
+            }
+
+            // 2. Calculate Serum AG & Corrected AG first (helps resolve mixed normal-pH cases too!)
+            setSlot('eq_ag_na', Na, 1);
+            setSlot('eq_ag_hco3', HCO3, 1);
+            setSlot('eq_ag_cl', Cl, 1);
+            setSlot('eq_cag_alb', Alb, 1);
+
+            if (Na !== null && HCO3 !== null && Cl !== null) {
+                sol.measuredAG = Number((Na - (HCO3 + Cl)).toFixed(1));
+                setSlot('eq_cag_ag', sol.measuredAG, 1);
+                sol.correctedAG = Number((sol.measuredAG + 2.5 * (4.0 - Alb)).toFixed(1));
+            } else {
+                setSlot('eq_cag_ag', null);
+            }
+
+            // Determine Primary Disorder
+            if (sol.hasGas) {
+                if (pH < 7.35) {
+                    if (HCO3 < 24 && CO2 <= 45) sol.primaryDisorder = 'Metabolic Acidosis';
+                    else if (CO2 > 40 && HCO3 >= 22) sol.primaryDisorder = 'Respiratory Acidosis';
+                    else {
+                        // Both acidic (Combined Met + Resp Acidosis): pick dominant fractional shift
+                        sol.primaryDisorder = ((24 - HCO3) / 24 >= (CO2 - 40) / 40) ? 'Metabolic Acidosis' : 'Respiratory Acidosis';
+                    }
+                } else if (pH > 7.45) {
+                    if (HCO3 > 24 && CO2 >= 35) sol.primaryDisorder = 'Metabolic Alkalosis';
+                    else if (CO2 < 40 && HCO3 <= 26) sol.primaryDisorder = 'Respiratory Alkalosis';
+                    else {
+                        sol.primaryDisorder = ((HCO3 - 24) / 24 >= (40 - CO2) / 40) ? 'Metabolic Alkalosis' : 'Respiratory Alkalosis';
+                    }
+                } else {
+                    // Normal pH (7.35 - 7.45), check if abnormal HCO3/CO2 or elevated AG
+                    if (HCO3 < 22 || (sol.correctedAG !== null && sol.correctedAG > 12 && HCO3 < 24)) {
+                        sol.primaryDisorder = 'Metabolic Acidosis';
+                    } else if (CO2 > 45 && pH <= 7.40) {
+                        sol.primaryDisorder = 'Respiratory Acidosis';
+                    } else if (HCO3 > 26 && pH > 7.40) {
+                        sol.primaryDisorder = 'Metabolic Alkalosis';
+                    } else if (CO2 < 35 && pH > 7.40) {
+                        sol.primaryDisorder = 'Respiratory Alkalosis';
+                    } else {
+                        sol.primaryDisorder = 'Normal / Mixed Normal pH';
+                    }
+                }
+                sol.reasoningSteps.push(`• <b>Step 1 (Primary):</b> pH is ${pH}, HCO₃⁻ is ${HCO3}, pCO₂ is ${CO2} → Primary process is <b>${sol.primaryDisorder}</b>.`);
+            }
+
+            // 3. Step 2: Compensation Calculation based on Primary Disorder
+            const compDisplay = document.getElementById('compEquationsDisplay');
+            const compBadge = document.getElementById('compFormulaUsedBadge');
+
+            if (sol.hasGas && sol.primaryDisorder) {
+                if (sol.primaryDisorder === 'Metabolic Acidosis') {
+                    compBadge.textContent = "Winter's Formula: Exp CO₂ = (1.5 × HCO₃⁻) + 8 ± 2";
+                    const exp = Number(((1.5 * HCO3) + 8).toFixed(1));
+                    const low = Number((exp - 2).toFixed(1));
+                    const high = Number((exp + 2).toFixed(1));
+                    sol.expCompTarget = exp;
+                    sol.expCompRangeText = `${low} – ${high} mmHg`;
+                    sol.compMeasuredVal = CO2;
+
+                    compDisplay.innerHTML = `
+                        <span>Expected pCO₂ = (1.5 × HCO₃⁻ <span class="eq-slot filled">${HCO3}</span>) + 8 ± 2</span>
+                        <span>⇒</span>
+                        <span class="text-sky-700">Expected: <span class="eq-slot filled">${exp}</span> (${sol.expCompRangeText})</span>
+                        <span class="text-slate-400">|</span>
+                        <span>Measured pCO₂: <span class="eq-slot filled">${CO2}</span></span>
+                    `;
+
+                    if (CO2 >= low && CO2 <= high) {
+                        sol.compStatus = 'compensated';
+                        sol.secondDisorder = 'None';
+                    } else if (CO2 > high) {
+                        sol.compStatus = 'under';
+                        sol.secondDisorder = 'Concurrent Respiratory Acidosis';
+                    } else {
+                        sol.compStatus = 'over';
+                        sol.secondDisorder = 'Concurrent Respiratory Alkalosis';
+                    }
+                } else if (sol.primaryDisorder === 'Metabolic Alkalosis') {
+                    compBadge.textContent = "Metabolic Alkalosis: Exp CO₂ = 0.7 × (HCO₃⁻ − 24) + 40 ± 2";
+                    const exp = Number((0.7 * (HCO3 - 24) + 40).toFixed(1));
+                    const low = Number((exp - 2).toFixed(1));
+                    const high = Number((exp + 2).toFixed(1));
+                    sol.expCompTarget = exp;
+                    sol.expCompRangeText = `${low} – ${high} mmHg`;
+                    sol.compMeasuredVal = CO2;
+
+                    compDisplay.innerHTML = `
+                        <span>Expected pCO₂ = 0.7 × (HCO₃⁻ <span class="eq-slot filled">${HCO3}</span> − 24) + 40 ± 2</span>
+                        <span>⇒</span>
+                        <span class="text-sky-700">Expected: <span class="eq-slot filled">${exp}</span> (${sol.expCompRangeText})</span>
+                        <span class="text-slate-400">|</span>
+                        <span>Measured pCO₂: <span class="eq-slot filled">${CO2}</span></span>
+                    `;
+
+                    if (CO2 >= low && CO2 <= high) {
+                        sol.compStatus = 'compensated';
+                        sol.secondDisorder = 'None';
+                    } else if (CO2 > high) {
+                        sol.compStatus = 'under';
+                        sol.secondDisorder = 'Concurrent Respiratory Acidosis';
+                    } else {
+                        sol.compStatus = 'over';
+                        sol.secondDisorder = 'Concurrent Respiratory Alkalosis';
+                    }
+                } else if (sol.primaryDisorder === 'Respiratory Acidosis') {
+                    const mult = chronicity === 'chronic' ? 4 : 1;
+                    compBadge.textContent = `Respiratory Acidosis (${chronicity.toUpperCase()}): For every ↑10 CO₂, HCO₃⁻ ↑ by ${mult}`;
+                    const deltaCO2 = (CO2 - 40) / 10;
+                    const exp = Number((24 + deltaCO2 * mult).toFixed(1));
+                    const low = Number((exp - 2).toFixed(1));
+                    const high = Number((exp + 2).toFixed(1));
+                    sol.expCompTarget = exp;
+                    sol.expCompRangeText = `${low} – ${high} mEq/L`;
+                    sol.compMeasuredVal = HCO3;
+
+                    compDisplay.innerHTML = `
+                        <span>Expected HCO₃⁻ = 24 + [ (pCO₂ <span class="eq-slot filled">${CO2}</span> − 40)/10 × ${mult} ]</span>
+                        <span>⇒</span>
+                        <span class="text-sky-700">Expected: <span class="eq-slot filled">${exp}</span> (${sol.expCompRangeText})</span>
+                        <span class="text-slate-400">|</span>
+                        <span>Measured HCO₃⁻: <span class="eq-slot filled">${HCO3}</span></span>
+                    `;
+
+                    if (HCO3 >= low && HCO3 <= high) {
+                        sol.compStatus = 'compensated';
+                        sol.secondDisorder = 'None';
+                    } else if (HCO3 > high) {
+                        sol.compStatus = 'over';
+                        sol.secondDisorder = 'Concurrent Metabolic Alkalosis';
+                    } else {
+                        sol.compStatus = 'under';
+                        sol.secondDisorder = 'Concurrent Metabolic Acidosis';
+                    }
+                } else if (sol.primaryDisorder === 'Respiratory Alkalosis') {
+                    const mult = chronicity === 'chronic' ? 5 : 2;
+                    compBadge.textContent = `Respiratory Alkalosis (${chronicity.toUpperCase()}): For every ↓10 CO₂, HCO₃⁻ ↓ by ${mult}`;
+                    const deltaCO2 = (40 - CO2) / 10;
+                    const exp = Number((24 - deltaCO2 * mult).toFixed(1));
+                    const low = Number((exp - 2).toFixed(1));
+                    const high = Number((exp + 2).toFixed(1));
+                    sol.expCompTarget = exp;
+                    sol.expCompRangeText = `${low} – ${high} mEq/L`;
+                    sol.compMeasuredVal = HCO3;
+
+                    compDisplay.innerHTML = `
+                        <span>Expected HCO₃⁻ = 24 − [ (40 − pCO₂ <span class="eq-slot filled">${CO2}</span>)/10 × ${mult} ]</span>
+                        <span>⇒</span>
+                        <span class="text-sky-700">Expected: <span class="eq-slot filled">${exp}</span> (${sol.expCompRangeText})</span>
+                        <span class="text-slate-400">|</span>
+                        <span>Measured HCO₃⁻: <span class="eq-slot filled">${HCO3}</span></span>
+                    `;
+
+                    if (HCO3 >= low && HCO3 <= high) {
+                        sol.compStatus = 'compensated';
+                        sol.secondDisorder = 'None';
+                    } else if (HCO3 > high) {
+                        sol.compStatus = 'under';
+                        sol.secondDisorder = 'Concurrent Metabolic Alkalosis';
+                    } else {
+                        sol.compStatus = 'over';
+                        sol.secondDisorder = 'Concurrent Metabolic Acidosis';
+                    }
+                } else {
+                    sol.expCompTarget = 40;
+                    sol.compStatus = 'compensated';
+                    sol.secondDisorder = 'None';
+                }
+
+                sol.reasoningSteps.push(`• <b>Step 2 (Compensation):</b> Expected value is <b>${sol.expCompTarget}</b> (${sol.expCompRangeText}). Patient has <b>${sol.compMeasuredVal}</b> → <b>${sol.secondDisorder === 'None' ? 'Appropriately Compensated' : sol.secondDisorder}</b>.`);
+            }
+
+            // 4. Step 3 & Step 4A: AG Type, Delta-Delta, Osmolar Gap
+            if (sol.correctedAG !== null) {
+                if (sol.correctedAG > 12) {
+                    sol.agType = 'HAGMA';
+                } else if (sol.primaryDisorder === 'Metabolic Acidosis' || (HCO3 !== null && HCO3 < 22)) {
+                    sol.agType = 'NAGMA';
+                } else {
+                    sol.agType = 'No Acidosis / Normal AG';
+                }
+                sol.reasoningSteps.push(`• <b>Step 3 (Anion Gap):</b> Measured AG = ${sol.measuredAG}, Albumin-Corrected AG = <b>${sol.correctedAG}</b> → Classification: <b>${sol.agType}</b>.`);
+            }
+
+            // Delta-Delta calculation
+            setSlot('eq_dd_ag', sol.correctedAG, 1);
+            setSlot('eq_dd_hco3', HCO3, 1);
+
+            if (sol.correctedAG !== null && HCO3 !== null && sol.agType === 'HAGMA' && (24 - HCO3) > 0) {
+                sol.deltaNum = Number((sol.correctedAG - 12).toFixed(1));
+                sol.deltaDen = Number((24 - HCO3).toFixed(1));
+                sol.deltaRatio = Number((sol.deltaNum / sol.deltaDen).toFixed(2));
+                setSlot('eq_dd_num', sol.deltaNum, 1);
+                setSlot('eq_dd_den', sol.deltaDen, 1);
+
+                if (sol.deltaRatio < 1.0) {
+                    sol.deltaInterp = 'HAGMA + NAGMA (< 1)';
+                } else if (sol.deltaRatio > 2.0) {
+                    sol.deltaInterp = 'HAGMA + Metabolic Alkalosis (> 2)';
+                } else {
+                    sol.deltaInterp = 'Pure HAGMA (1 to 2)';
+                }
+                sol.reasoningSteps.push(`• <b>4A (Δ/Δ Ratio):</b> ΔAG (${sol.deltaNum}) / ΔHCO₃⁻ (${sol.deltaDen}) = <b>${sol.deltaRatio}</b> → <b>${sol.deltaInterp}</b>.`);
+            } else {
+                setSlot('eq_dd_num', null);
+                setSlot('eq_dd_den', null);
+            }
+
+            // Serum Osmolar Gap calculation (Supports both conventional mg/dL and SI mmol/L units via toggle or auto-detect!)
+            setSlot('eq_osm_na', Na, 1);
+            setSlot('eq_osm_glu', Glu, 1);
+            setSlot('eq_osm_bun', BUN, 1);
+            setSlot('eq_osm_etoh', EtOH, 1);
+
+            if (Na !== null) {
+                const isGluMmol = (labUnits.Glu === 'mmol/L') || (Glu < 35);
+                const isBunMmol = (labUnits.BUN === 'mmol/L') || (BUN < 10);
+                const isEtohMmol = (labUnits.EtOH === 'mmol/L');
+
+                const gluTerm = isGluMmol ? Glu : (Glu / 18);
+                const bunTerm = isBunMmol ? BUN : (BUN / 2.8);
+                const etohTerm = isEtohMmol ? EtOH : (EtOH / 4.6);
+                sol.calcOsm = Number((2 * Na + gluTerm + bunTerm + etohTerm).toFixed(1));
+                setSlot('eq_osm_calc', sol.calcOsm, 1);
+
+                if (Osm !== null) {
+                    sol.osmGap = Number((Osm - sol.calcOsm).toFixed(1));
+                    sol.osmStatus = sol.osmGap > 10 ? 'Elevated (> 10)' : 'Normal (<= 10)';
+                    if (sol.agType === 'HAGMA') {
+                        sol.reasoningSteps.push(`• <b>Step 4A (Osmolar Gap):</b> Measured Osm (${Osm}) − Calculated Osm (${sol.calcOsm}) = <b>${sol.osmGap}</b> → <b>${sol.osmStatus}</b>.`);
+                    }
+                }
+            } else {
+                setSlot('eq_osm_calc', null);
+            }
+
+            // 5. Step 4B: Urine Anion Gap & RTA Status
+            setSlot('eq_uag_na', UNa, 1);
+            setSlot('eq_uag_k', UK, 1);
+            setSlot('eq_uag_cl', UCl, 1);
+
+            const hasNAGMA = (sol.agType === 'NAGMA') || (sol.deltaInterp === 'HAGMA + NAGMA (< 1)');
+
+            if (UNa !== null && UK !== null && UCl !== null) {
+                sol.uagVal = Number(((UNa + UK) - UCl).toFixed(1));
+                sol.uagSign = sol.uagVal >= 0 ? 'positive' : 'negative';
+
+                if (hasNAGMA) {
+                    if (sol.uagSign === 'positive') {
+                        if (K !== null && K > 5.0) {
+                            sol.rtaStatus = 'Type 4 RTA (Hypoaldosteronism)';
+                        } else {
+                            sol.rtaStatus = 'Distal RTA (Type 1)';
+                        }
+                    } else {
+                        // Negative UAG in NAGMA: Diarrhea vs Proximal RTA Type 2
+                        if (UpH !== null && UpH < 5.3 && K !== null && K < 3.5 && UNa > 40) {
+                            // Default negative UAG with low HCO3 to GI Loss unless specific Proximal RTA context
+                            sol.rtaStatus = 'GI Loss (Diarrhea / Laxatives) - No RTA';
+                        } else {
+                            sol.rtaStatus = 'GI Loss (Diarrhea / Laxatives) - No RTA';
+                        }
+                    }
+                    sol.reasoningSteps.push(`• <b>Step 4B (Urine Anion Gap):</b> (UNa ${UNa} + UK ${UK}) − UCl ${UCl} = <b>${sol.uagVal} (${sol.uagSign.toUpperCase()})</b> → <b>${sol.rtaStatus}</b>.`);
+                } else {
+                    sol.rtaStatus = 'Absent (No NAGMA)';
+                }
+            }
+
+            // 6. Build Final Diagnosis Lines (Step 5)
+            const disorders = [];
+            if (sol.agType === 'HAGMA') {
+                disorders.push('High Anion Gap Metabolic Acidosis (HAGMA)');
+                if (sol.deltaInterp === 'HAGMA + NAGMA (< 1)') {
+                    disorders.push('Concurrent Normal Anion Gap Metabolic Acidosis (NAGMA, Δ/Δ < 1)');
+                } else if (sol.deltaInterp === 'HAGMA + Metabolic Alkalosis (> 2)') {
+                    disorders.push('Concurrent Metabolic Alkalosis (Δ/Δ > 2)');
+                }
+            } else if (sol.agType === 'NAGMA') {
+                disorders.push('Normal Anion Gap Metabolic Acidosis (NAGMA)');
+            } else if (sol.primaryDisorder && sol.primaryDisorder !== 'Metabolic Acidosis') {
+                disorders.push(sol.primaryDisorder);
+            }
+
+            if (sol.secondDisorder && sol.secondDisorder !== 'None') {
+                if (!disorders.some(d => d.includes(sol.secondDisorder.replace('Concurrent ', '')))) {
+                    disorders.push(sol.secondDisorder);
+                }
+            } else if (sol.compStatus === 'compensated' && sol.primaryDisorder) {
+                disorders.push(`Appropriate Compensation`);
+            }
+
+            if (sol.osmStatus === 'Elevated (> 10)' && sol.agType === 'HAGMA') {
+                disorders.push('Elevated Serum Osmolar Gap (> 10, suspect Toxic Alcohol ingestion)');
+            }
+
+            sol.finalDisordersList = disorders;
+
+            // RTA Line
+            if (!hasNAGMA) {
+                sol.finalRtaText = 'RTA Absent (No Normal Anion Gap Metabolic Acidosis present)';
+            } else if (sol.rtaStatus === 'Distal RTA (Type 1)') {
+                sol.finalRtaText = `RTA Present: Classic Distal RTA (Type 1) — Positive Urine AG (${sol.uagVal}), impaired distal H⁺ excretion (Urine pH ${UpH ?? '>5.5'}), Hypokalemia (K⁺ ${K ?? 'low'})`;
+            } else if (sol.rtaStatus === 'Type 4 RTA (Hypoaldosteronism)') {
+                sol.finalRtaText = `RTA Present: Distal RTA Type 4 (Hypoaldosteronism) — Positive Urine AG (${sol.uagVal}) + Hyperkalemia (K⁺ ${K})`;
+            } else if (sol.rtaStatus === 'Proximal RTA (Type 2)') {
+                sol.finalRtaText = `RTA Present: Proximal RTA (Type 2) — Negative Urine AG (${sol.uagVal}), intact distal acidification (Urine pH < 5.3)`;
+            } else {
+                const laxNote = (UK !== null && UK < 20) ? ' (Urine K⁺ < 20 suggests laxative abuse)' : '';
+                sol.finalRtaText = `RTA Absent — NAGMA with Negative Urine AG (${sol.uagVal ?? '--'}) indicates intact renal NH₄⁺ excretion (Extrarenal GI Bicarb loss: Diarrhea${laxNote})`;
+            }
+
+            return sol;
+        }
+
+        // Triggered whenever any top lab input changes
+        function onLabChange() {
+            clearFeedbackBadges();
+            const sol = computeAcidBaseSolution();
+
+            if (currentMode === 'auto') {
+                populateWorksheetWithSolution(sol);
+                updateFinalDiagnosisBox(sol, true);
+            } else {
+                updateFinalDiagnosisBox(sol, false);
+            }
+        }
+
+        // Fills all worksheet inputs automatically when in Auto-Solve mode
+        function populateWorksheetWithSolution(sol) {
+            if (!sol.hasGas) return;
+
+            document.getElementById('user_primaryDisorder').value = sol.primaryDisorder;
+            document.getElementById('user_expCompVal').value = sol.expCompTarget !== null ? sol.expCompTarget : '';
+
+            const compRadios = document.getElementsByName('user_compStatus');
+            compRadios.forEach(r => r.checked = (r.value === sol.compStatus));
+
+            document.getElementById('user_secondDisorder').value = sol.secondDisorder;
+            document.getElementById('user_measuredAG').value = sol.measuredAG !== null ? sol.measuredAG : '';
+            document.getElementById('user_correctedAG').value = sol.correctedAG !== null ? sol.correctedAG : '';
+
+            const agRadios = document.getElementsByName('user_agType');
+            agRadios.forEach(r => r.checked = (r.value === sol.agType));
+
+            document.getElementById('user_deltaRatio').value = sol.deltaRatio !== null ? sol.deltaRatio : '';
+            document.getElementById('user_deltaInterp').value = sol.deltaInterp;
+
+            document.getElementById('user_osmGap').value = sol.osmGap !== null ? sol.osmGap : '';
+            document.getElementById('user_osmStatus').value = sol.osmStatus;
+
+            document.getElementById('user_uagVal').value = sol.uagVal !== null ? sol.uagVal : '';
+            const uagRadios = document.getElementsByName('user_uagSign');
+            uagRadios.forEach(r => r.checked = (r.value === sol.uagSign));
+
+            document.getElementById('user_rtaStatus').value = sol.rtaStatus;
+        }
+
+        // Updates the bottom Final Diagnosis Box
+        function updateFinalDiagnosisBox(sol, showFullSolution) {
+            const line1 = document.getElementById('finalDxLine1');
+            const line2 = document.getElementById('finalDxLine2');
+            const reasoning = document.getElementById('finalDxReasoning');
+
+            if (!sol.hasGas) {
+                line1.textContent = 'Enter VBG/ABG and Serum Chemistry values above (or pick a Preset Case) to calculate...';
+                line2.textContent = 'RTA Status: Waiting for lab inputs...';
+                reasoning.innerHTML = '• Fill in the lab boxes at the top of the sheet to begin.';
+                return;
+            }
+
+            if (showFullSolution) {
+                line1.innerHTML = `<span class="text-pink-600">➔</span> ${sol.finalDisordersList.join(' &nbsp;➕&nbsp; ')}`;
+                line2.innerHTML = `<span class="text-amber-600">➔</span> ${sol.finalRtaText}`;
+                reasoning.innerHTML = sol.reasoningSteps.join('<br>');
+            } else {
+                line1.innerHTML = `<span class="text-slate-500">🔒 In "Try It Yourself" Mode:</span> Fill out the steps above and click <b>"✅ Check My Answers"</b> (or switch to <b>"⚡ Auto-Solve"</b>) to reveal the complete Final Diagnosis!`;
+                line2.innerHTML = `<span class="text-slate-500">🔒 RTA Status:</span> Complete Step 4B and click "Check My Answers" to verify presence or absence of RTA.`;
+                reasoning.innerHTML = `• Equation slots have been auto-populated with your lab numbers. Calculate the results in each box and click <b>Check My Answers</b>!`;
+            }
+        }
+
+        // Switch between Try It Yourself and Auto-Solve modes
+        function setMode(mode) {
+            currentMode = mode;
+            const btnTry = document.getElementById('btnTryMode');
+            const btnAuto = document.getElementById('btnAutoMode');
+            const btnCheck = document.getElementById('btnCheckAnswers');
+            const modeBadge = document.getElementById('modeBadge');
+
+            if (mode === 'auto') {
+                btnAuto.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-pink-500 text-white shadow-sm';
+                btnTry.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-pink-700 hover:bg-pink-100';
+                btnCheck.classList.add('hidden');
+                if (modeBadge) modeBadge.textContent = '⚡ Auto-Solve Mode Active';
+            } else {
+                btnTry.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-pink-500 text-white shadow-sm';
+                btnAuto.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-pink-700 hover:bg-pink-100';
+                btnCheck.classList.remove('hidden');
+                if (modeBadge) modeBadge.textContent = '✏️ Try It Yourself Mode: Fill the boxes & click Check!';
+            }
+            onLabChange();
+        }
+
+        // Load a preset case into the lab inputs
+        function loadPresetCase(caseKey) {
+            resetUnitsToDefault();
+            clearWorksheetUserAnswers();
+            clearFeedbackBadges();
+
+            const banner = document.getElementById('caseBanner');
+            if (!caseKey || !PRESET_CASES[caseKey]) {
+                banner.classList.add('hidden');
+                onLabChange();
+                return;
+            }
+
+            const c = PRESET_CASES[caseKey];
+            banner.classList.remove('hidden');
+            document.getElementById('caseTitle').textContent = c.title;
+            document.getElementById('caseVignette').textContent = c.vignette;
+
+            const L = c.labs;
+            document.getElementById('lab_pH').value = L.pH;
+            document.getElementById('lab_HCO3').value = L.HCO3;
+            document.getElementById('lab_CO2').value = L.CO2;
+            document.getElementById('lab_respChronicity').value = L.respChronicity;
+
+            document.getElementById('lab_Na').value = L.Na;
+            document.getElementById('lab_K').value = L.K;
+            document.getElementById('lab_Cl').value = L.Cl;
+            document.getElementById('lab_Alb').value = L.Alb;
+            document.getElementById('lab_Osm').value = L.Osm;
+            document.getElementById('lab_Glu').value = L.Glu;
+            document.getElementById('lab_BUN').value = L.BUN;
+            document.getElementById('lab_EtOH').value = L.EtOH;
+            document.getElementById('lab_Lac').value = L.Lac;
+            document.getElementById('lab_Ket').value = L.Ket;
+
+            document.getElementById('lab_UNa').value = L.UNa;
+            document.getElementById('lab_UK').value = L.UK;
+            document.getElementById('lab_UCl').value = L.UCl;
+            document.getElementById('lab_UpH').value = L.UpH;
+
+            onLabChange();
+        }
+
+        // Grade a single field and show ✅ or ❌ with explanation
+        function markFeedback(fbId, inputEl, isCorrect, explanationText) {
+            const fb = document.getElementById(fbId);
+            if (!fb) return;
+            fb.classList.remove('hidden');
+
+            if (inputEl) {
+                inputEl.classList.remove('correct-field', 'wrong-field');
+                inputEl.classList.add(isCorrect ? 'correct-field' : 'wrong-field');
+            }
+
+            if (isCorrect) {
+                fb.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1.5';
+                fb.innerHTML = `<span>✅ Correct!</span> <span class="font-medium">${explanationText}</span>`;
+            } else {
+                fb.className = 'text-xs font-bold px-3 py-1.5 rounded-xl bg-rose-100 text-rose-900 border border-rose-300 flex items-center gap-1.5';
+                fb.innerHTML = `<span>❌ Needs Fix:</span> <span class="font-medium">${explanationText}</span>`;
+            }
+        }
+
+        // Check all user answers in "Try It Yourself" mode
+        function checkAllAnswers() {
+            const sol = computeAcidBaseSolution();
+            if (!sol.hasGas) {
+                const scoreBanner = document.getElementById('scoreBanner');
+                scoreBanner.classList.remove('hidden');
+                document.getElementById('scoreEmoji').textContent = '⚠️';
+                document.getElementById('scoreTitle').textContent = 'Please enter Lab Values or select a Preset Case first!';
+                document.getElementById('scoreSubtitle').textContent = 'Choose one of the 8 clinical cases in the top bar to test yourself.';
+                return;
+            }
+
+            let correctCount = 0;
+            let totalChecks = 0;
+
+            // 1. Check Primary Disorder
+            const elPrim = document.getElementById('user_primaryDisorder');
+            const isPrimOk = elPrim.value === sol.primaryDisorder;
+            totalChecks++; if (isPrimOk) correctCount++;
+            markFeedback(
+                'fb_primaryDisorder',
+                elPrim,
+                isPrimOk,
+                isPrimOk
+                    ? `${sol.primaryDisorder} matches pH & primary shift.`
+                    : `Right answer: <b>${sol.primaryDisorder}</b> (Look at pH ${getNum('lab_pH')} and primary shift in HCO₃⁻/pCO₂).`
+            );
+
+            // 2. Check Expected Compensation Number (allow ±2 tolerance)
+            const elExpComp = document.getElementById('user_expCompVal');
+            const userExpVal = getNum('user_expCompVal');
+            const isExpOk = userExpVal !== null && Math.abs(userExpVal - sol.expCompTarget) <= 2.0;
+            totalChecks++; if (isExpOk) correctCount++;
+            markFeedback(
+                'fb_expCompVal',
+                elExpComp,
+                isExpOk,
+                isExpOk
+                    ? `Spot on! Expected center is ${sol.expCompTarget} (${sol.expCompRangeText}).`
+                    : `Right answer: <b>${sol.expCompTarget}</b> (Acceptable range: ${sol.expCompRangeText}).`
+            );
+
+            // 3. Check Compensation Radio Status
+            const checkedCompRadio = document.querySelector('input[name="user_compStatus"]:checked');
+            const userCompStatus = checkedCompRadio ? checkedCompRadio.value : '';
+            const isCompStatusOk = userCompStatus === sol.compStatus;
+            totalChecks++; if (isCompStatusOk) correctCount++;
+            markFeedback(
+                'fb_compStatus',
+                null,
+                isCompStatusOk,
+                isCompStatusOk
+                    ? `Measured value (${sol.compMeasuredVal}) is correctly classified.`
+                    : `Measured is <b>${sol.compMeasuredVal}</b> vs expected <b>${sol.expCompRangeText}</b> → Select <b>${sol.compStatus.toUpperCase()}</b>.`
+            );
+
+            // 4. Check 2nd Disorder from Compensation
+            const elSec = document.getElementById('user_secondDisorder');
+            const isSecOk = elSec.value === sol.secondDisorder;
+            totalChecks++; if (isSecOk) correctCount++;
+            markFeedback(
+                'fb_secondDisorder',
+                elSec,
+                isSecOk,
+                isSecOk
+                    ? `${sol.secondDisorder}.`
+                    : `Right answer: <b>${sol.secondDisorder}</b>.`
+            );
+
+            // 5. Check Measured AG
+            const elMAG = document.getElementById('user_measuredAG');
+            const userMAG = getNum('user_measuredAG');
+            const isMAGOk = userMAG !== null && Math.abs(userMAG - sol.measuredAG) <= 0.5;
+            totalChecks++; if (isMAGOk) correctCount++;
+            markFeedback(
+                'fb_measuredAG',
+                elMAG,
+                isMAGOk,
+                isMAGOk
+                    ? `${sol.measuredAG} mEq/L.`
+                    : `Na − (HCO₃ + Cl) = <b>${sol.measuredAG}</b>.`
+            );
+
+            // 6. Check Corrected AG
+            const elCAG = document.getElementById('user_correctedAG');
+            const userCAG = getNum('user_correctedAG');
+            const isCAGOk = userCAG !== null && Math.abs(userCAG - sol.correctedAG) <= 0.5;
+            totalChecks++; if (isCAGOk) correctCount++;
+            markFeedback(
+                'fb_correctedAG',
+                elCAG,
+                isCAGOk,
+                isCAGOk
+                    ? `${sol.correctedAG} mEq/L.`
+                    : `AG + 2.5 × (4 − Alb) = <b>${sol.correctedAG}</b>.`
+            );
+
+            // 7. Check AG Classification (HAGMA vs NAGMA)
+            const checkedAgRadio = document.querySelector('input[name="user_agType"]:checked');
+            const userAgType = checkedAgRadio ? checkedAgRadio.value : '';
+            const isAgTypeOk = userAgType === sol.agType;
+            totalChecks++; if (isAgTypeOk) correctCount++;
+            markFeedback(
+                'fb_agType',
+                null,
+                isAgTypeOk,
+                isAgTypeOk
+                    ? `Corrected AG is ${sol.correctedAG} → ${sol.agType}.`
+                    : `Corrected AG is ${sol.correctedAG} (cutoff >12) → Right answer: <b>${sol.agType}</b>.`
+            );
+
+            // 8. Check Delta-Delta if HAGMA
+            if (sol.agType === 'HAGMA') {
+                const elDD = document.getElementById('user_deltaRatio');
+                const userDD = getNum('user_deltaRatio');
+                const isDDOk = userDD !== null && Math.abs(userDD - sol.deltaRatio) <= 0.25;
+                totalChecks++; if (isDDOk) correctCount++;
+                markFeedback(
+                    'fb_deltaRatio',
+                    elDD,
+                    isDDOk,
+                    isDDOk
+                        ? `ΔAG/ΔHCO₃ = ${sol.deltaRatio}.`
+                        : `(${sol.correctedAG} − 12) / (24 − ${getNum('lab_HCO3')}) = <b>${sol.deltaRatio}</b>.`
+                );
+
+                const elDDInt = document.getElementById('user_deltaInterp');
+                const isDDIntOk = elDDInt.value === sol.deltaInterp;
+                totalChecks++; if (isDDIntOk) correctCount++;
+                markFeedback(
+                    'fb_deltaInterp',
+                    elDDInt,
+                    isDDIntOk,
+                    isDDIntOk
+                        ? `${sol.deltaInterp}.`
+                        : `Ratio is ${sol.deltaRatio} → Right answer: <b>${sol.deltaInterp}</b>.`
+                );
+
+                // Check Osmolar Gap
+                const elOsmGap = document.getElementById('user_osmGap');
+                const userOsmGap = getNum('user_osmGap');
+                const elOsmSt = document.getElementById('user_osmStatus');
+                const isOsmOk = (userOsmGap !== null && Math.abs(userOsmGap - sol.osmGap) <= 2.0) && (elOsmSt.value === sol.osmStatus);
+                totalChecks++; if (isOsmOk) correctCount++;
+                markFeedback(
+                    'fb_osmStatus',
+                    elOsmSt,
+                    isOsmOk,
+                    isOsmOk
+                        ? `Osm Gap is ${sol.osmGap} (${sol.osmStatus}).`
+                        : `Calc Osm is ${sol.calcOsm}, so Osm Gap = <b>${sol.osmGap}</b> → <b>${sol.osmStatus}</b>.`
+                );
+            }
+
+            // 9. Check Urine AG & RTA if NAGMA is present
+            const hasNAGMA = (sol.agType === 'NAGMA') || (sol.deltaInterp === 'HAGMA + NAGMA (< 1)');
+            if (hasNAGMA) {
+                const elUAG = document.getElementById('user_uagVal');
+                const userUAG = getNum('user_uagVal');
+                const isUAGOk = userUAG !== null && Math.abs(userUAG - sol.uagVal) <= 1.0;
+                totalChecks++; if (isUAGOk) correctCount++;
+                markFeedback(
+                    'fb_uagVal',
+                    elUAG,
+                    isUAGOk,
+                    isUAGOk
+                        ? `UAG = ${sol.uagVal}.`
+                        : `(UNa + UK) − UCl = <b>${sol.uagVal}</b>.`
+                );
+
+                const checkedUagSign = document.querySelector('input[name="user_uagSign"]:checked');
+                const userUagSign = checkedUagSign ? checkedUagSign.value : '';
+                const isUagSignOk = userUagSign === sol.uagSign;
+                totalChecks++; if (isUagSignOk) correctCount++;
+                markFeedback(
+                    'fb_uagSign',
+                    null,
+                    isUagSignOk,
+                    isUagSignOk
+                        ? `UAG is ${sol.uagSign}.`
+                        : `UAG is ${sol.uagVal} → Select <b>${sol.uagSign.toUpperCase()}</b>.`
+                );
+
+                const elRTA = document.getElementById('user_rtaStatus');
+                const isRTAOk = elRTA.value === sol.rtaStatus;
+                totalChecks++; if (isRTAOk) correctCount++;
+                markFeedback(
+                    'fb_rtaStatus',
+                    elRTA,
+                    isRTAOk,
+                    isRTAOk
+                        ? `${sol.rtaStatus}.`
+                        : `Right answer: <b>${sol.rtaStatus}</b>.`
+                );
+            }
+
+            // Show Score Summary & Reveal Final Diagnosis at Bottom
+            const scoreBanner = document.getElementById('scoreBanner');
+            scoreBanner.classList.remove('hidden');
+            document.getElementById('scoreEmoji').textContent = correctCount === totalChecks ? '🏆' : '📝';
+            document.getElementById('scoreTitle').textContent = `You scored ${correctCount} / ${totalChecks} steps correct!`;
+            document.getElementById('scoreSubtitle').textContent = correctCount === totalChecks
+                ? 'Awesome job! Every calculation and clinical interpretation is spot on!'
+                : 'Check the red ❌ boxes below to see why an answer was wrong and the suggested right answer.';
+
+            updateFinalDiagnosisBox(sol, true);
+        }
+
+        // Clear feedback badges and green/red outlines
+        function clearFeedbackBadges() {
+            const fbIds = [
+                'fb_primaryDisorder', 'fb_expCompVal', 'fb_compStatus', 'fb_secondDisorder',
+                'fb_measuredAG', 'fb_correctedAG', 'fb_agType', 'fb_deltaRatio',
+                'fb_deltaInterp', 'fb_osmStatus', 'fb_uagVal', 'fb_uagSign', 'fb_rtaStatus'
+            ];
+            fbIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            document.querySelectorAll('.correct-field, .wrong-field').forEach(el => {
+                el.classList.remove('correct-field', 'wrong-field');
+            });
+
+            document.getElementById('scoreBanner').classList.add('hidden');
+        }
+
+        // Clear only user answers in the steps
+        function clearWorksheetUserAnswers() {
+            const ids = [
+                'user_primaryDisorder', 'user_expCompVal', 'user_secondDisorder',
+                'user_measuredAG', 'user_correctedAG', 'user_deltaRatio',
+                'user_deltaInterp', 'user_osmGap', 'user_osmStatus',
+                'user_uagVal', 'user_rtaStatus'
+            ];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            ['user_compStatus', 'user_agType', 'user_uagSign'].forEach(name => {
+                document.getElementsByName(name).forEach(r => r.checked = false);
+            });
+        }
+
+        // Clear everything including top lab values
+        function clearAll() {
+            document.getElementById('caseSelector').value = '';
+            document.getElementById('caseBanner').classList.add('hidden');
+            const labIds = [
+                'lab_pH', 'lab_HCO3', 'lab_CO2', 'lab_Na', 'lab_K', 'lab_Cl',
+                'lab_Alb', 'lab_Osm', 'lab_Glu', 'lab_BUN', 'lab_EtOH', 'lab_Lac',
+                'lab_UNa', 'lab_UK', 'lab_UCl', 'lab_UpH'
+            ];
+            labIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            clearWorksheetUserAnswers();
+            clearFeedbackBadges();
+            onLabChange();
+        }
+
+        // =====================================================================
+        // EXPLANATION POP-UP CONTENT (From Images 3, 4, and 5)
+        // =====================================================================
+        const EXPLANATIONS = {
+            step1: {
+                icon: "⚖️",
+                title: "Step 1: How to Identify the Primary Disorder",
+                html: `
+                    <div class="space-y-3">
+                        <div class="p-3.5 rounded-2xl bg-pink-50 border-2 border-pink-200">
+                            <h4 class="font-cute font-bold text-pink-900 text-base mb-1">1. Check the Normals First</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>pH:</b> 7.40 (Normal range: 7.35 – 7.45) → &lt;7.35 is <b>Acidemia</b>, &gt;7.45 is <b>Alkalemia</b>.</li>
+                                <li><b>🧁 HCO₃⁻ (Metabolic):</b> 24 mEq/L (22 – 26). Moves in the <b>same direction</b> as pH.</li>
+                                <li><b>🫁 pCO₂ (Respiratory):</b> 40 mmHg (35 – 45). Moves in the <b>opposite direction</b> to pH.</li>
+                            </ul>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="p-3 rounded-xl bg-rose-50 border border-rose-200">
+                                <div class="font-bold text-rose-900">↓ pH (&lt; 7.35) = Acidosis</div>
+                                <p class="text-xs mt-1">• If <b>↓ HCO₃⁻ (&lt;22)</b> ⇒ <b>Metabolic Acidosis</b></p>
+                                <p class="text-xs">• If <b>↑ pCO₂ (&gt;45)</b> ⇒ <b>Respiratory Acidosis</b></p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-sky-50 border border-sky-200">
+                                <div class="font-bold text-sky-900">↑ pH (&gt; 7.45) = Alkalosis</div>
+                                <p class="text-xs mt-1">• If <b>↑ HCO₃⁻ (&gt;26)</b> ⇒ <b>Metabolic Alkalosis</b></p>
+                                <p class="text-xs">• If <b>↓ pCO₂ (&lt;35)</b> ⇒ <b>Respiratory Alkalosis</b></p>
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs">
+                            <b>💡 Pro Tip:</b> Even if pH is normal (7.35–7.45), there can still be a mixed acid-base disorder (for example, HAGMA + Metabolic Alkalosis in DKA with vomiting). Always check the Anion Gap in Step 3!
+                        </div>
+                    </div>
+                `
+            },
+            step2: {
+                icon: "🫁",
+                title: "Step 2: Checking Compensation & Finding a 2nd Disorder",
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-3.5 rounded-2xl bg-sky-50 border-2 border-sky-200">
+                            <h4 class="font-cute font-bold text-sky-900 text-base mb-2">Metabolic Disorders → Lungs Compensate Immediately (pCO₂)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-xl border border-sky-200">
+                                    <div class="font-bold text-sky-900">Metabolic Acidosis (Winter's Formula)</div>
+                                    <div class="font-mono font-bold text-rose-600 my-1">Exp CO₂ = (1.5 × Serum HCO₃⁻) + 8 ± 2</div>
+                                    <p>• If measured CO₂ &gt; Expected ⇒ <b>Concurrent Respiratory Acidosis</b></p>
+                                    <p>• If measured CO₂ &lt; Expected ⇒ <b>Concurrent Respiratory Alkalosis</b> (e.g. Salicylates, Sepsis)</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-sky-200">
+                                    <div class="font-bold text-sky-900">Metabolic Alkalosis</div>
+                                    <div class="font-mono font-bold text-sky-700 my-1">Exp CO₂ = (0.7 × ΔHCO₃⁻) + 40 ± 2</div>
+                                    <p class="text-slate-500">where ΔHCO₃⁻ = Measured HCO₃⁻ − 24</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3.5 rounded-2xl bg-purple-50 border-2 border-purple-200">
+                            <h4 class="font-cute font-bold text-purple-900 text-base mb-1">Respiratory Disorders → Kidneys Compensate (Up 1–4, Down 2–5 Rule!)</h4>
+                            <p class="text-xs text-purple-800 mb-2">Memory Trick from your notes: <b>"Resp disorders: Up 1–4, Down 2–5"</b> (Acute vs Chronic &gt; 3 days)</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-xl border border-purple-200">
+                                    <div class="font-bold text-purple-900">Respiratory Acidosis (For every 10 ↑ CO₂):</div>
+                                    <p class="mt-1">• <b>Acute:</b> ↑ <b>1</b> HCO₃⁻ &nbsp;|&nbsp; <b>Chronic (&gt;3d):</b> ↑ <b>4</b> HCO₃⁻</p>
+                                    <p class="font-mono text-purple-700 mt-1">Exp HCO₃⁻ = 24 + Δ</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-purple-200">
+                                    <div class="font-bold text-purple-900">Respiratory Alkalosis (For every 10 ↓ CO₂):</div>
+                                    <p class="mt-1">• <b>Acute:</b> ↓ <b>2</b> HCO₃⁻ &nbsp;|&nbsp; <b>Chronic (&gt;3d):</b> ↓ <b>5</b> HCO₃⁻</p>
+                                    <p class="font-mono text-purple-700 mt-1">Exp HCO₃⁻ = 24 − Δ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            step3: {
+                icon: "⚡",
+                title: "Step 3: Serum Anion Gap & Albumin Correction",
+                html: `
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200">
+                            <h4 class="font-cute font-bold text-emerald-900 text-base mb-1">1. Serum Anion Gap Equation</h4>
+                            <div class="font-mono font-bold text-base text-emerald-800 bg-white p-2.5 rounded-xl border border-emerald-200 my-2">
+                                Serum AG = Na⁺ − (Cl⁻ + HCO₃⁻) &nbsp;&nbsp;[Normal: 8 – 12]
+                            </div>
+                            <p class="text-xs text-rose-700 font-bold">⚠️ High-Yield Rule: Always use MEASURED Na⁺, NOT corrected Na⁺ for hyperglycemia!</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200">
+                            <h4 class="font-cute font-bold text-amber-900 text-base mb-1">2. Corrected AG for Patient's Albumin</h4>
+                            <p class="text-xs text-slate-700">Albumin is the main unmeasured anion in blood. Hypoalbuminemia masks a high anion gap! For every 1 g/dL drop in albumin below 4.0, the Anion Gap drops by 2.5.</p>
+                            <div class="font-mono font-bold text-sm text-amber-900 bg-white p-2.5 rounded-xl border border-amber-300 my-2">
+                                Corrected AG = Measured AG + [ 2.5 × (4.0 − Measured Albumin in g/dL) ]
+                            </div>
+                            <p class="text-xs text-amber-800 font-bold">💡 Note from your sheet: Always use small numbers in g/dL (e.g., 3.5, NOT 35)!</p>
+                        </div>
+                    </div>
+                `
+            },
+            step4A: {
+                icon: "🔮",
+                title: "Step 4A: Core Concept of Δ/Δ Ratio, Osmolar Gap & Toxin Pearls",
+                html: `
+                    <div class="space-y-4">
+                        <!-- Image 5 Core Concept of Delta/Delta -->
+                        <div class="p-4 rounded-2xl bg-purple-50 border-2 border-purple-200 space-y-2">
+                            <h4 class="font-cute font-bold text-purple-950 text-base">The Core Concept of Δ/Δ = (Measured AG − 12) / (24 − Serum HCO₃⁻)</h4>
+                            <p class="text-xs italic text-purple-900">"Did the bicarbonate drop by the exact same amount that the anion gap went up?"</p>
+                            <p class="text-xs text-slate-700">Normally, when a strong unmeasured acid enters the blood, it dissociates, donates H⁺, and consumes HCO₃⁻ on a <b>1:1 ratio</b>. If your AG goes up by 10, your HCO₃⁻ should drop by 10.</p>
+                            <ul class="space-y-1.5 text-xs pt-1">
+                                <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• "Normal" Ratio (1 to 2):</b> Pure HAGMA with no hidden acid-base disturbances. <span class="text-slate-500">(Note: Pure lactic acidosis averages ~1.6 because of slow lactate clearance).</span></li>
+                                <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• High Ratio (&gt; 2):</b> AG went up a lot, but HCO₃⁻ didn't drop nearly enough ⇒ <b>Extra base is hiding in the system!</b> Points to <b>HAGMA + Concurrent Metabolic Alkalosis</b> (e.g., vomiting) or chronic respiratory acidosis.</li>
+                                <li class="p-2 bg-white rounded-xl border border-purple-200"><b>• Low Ratio (&lt; 1):</b> HCO₃⁻ dropped way more than the AG rose ⇒ <b>Bicarb was lost or consumed by something else too!</b> Points to <b>HAGMA + Concurrent NAGMA</b> (like diarrhea or RTA).</li>
+                            </ul>
+                        </div>
+
+                        <!-- Osmolar Gap & Ingestions Table from Image 4 -->
+                        <div class="p-4 rounded-2xl bg-sky-50 border-2 border-sky-200 space-y-2">
+                            <h4 class="font-cute font-bold text-sky-950 text-base">Serum Osmolar Gap &amp; Toxic Ingestions Table</h4>
+                            <div class="font-mono text-xs font-bold bg-white p-2 rounded-xl border border-sky-200">
+                                Calc Osm = 2×Na + (BSL / 18) + (BUN / 2.8) + (EtOH / 4.6) &nbsp;|&nbsp; Osm Gap = Measured − Calc (&gt;10 is positive)
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-left bg-white rounded-xl overflow-hidden border border-slate-200">
+                                    <thead class="bg-slate-100 text-slate-800 font-bold">
+                                        <tr><th class="p-2">Ingestion</th><th class="p-2">AG</th><th class="p-2">Osm Gap</th><th class="p-2">Classic Manifestations</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100">
+                                        <tr><td class="p-2 font-bold">Acetaminophen</td><td class="p-2">↑</td><td class="p-2">Nl</td><td class="p-2">Hepatitis (5-oxoproline acidosis)</td></tr>
+                                        <tr><td class="p-2 font-bold">Salicylates (ASA)</td><td class="p-2">↑</td><td class="p-2">Nl</td><td class="p-2">Fever, tachycardia, tinnitus; <b>Met Acidosis + Resp Alkalosis</b> (CNS driven)</td></tr>
+                                        <tr><td class="p-2 font-bold">Methanol</td><td class="p-2">↑</td><td class="p-2">↑</td><td class="p-2">De-icing fluid; ΔMS, <b>blurred vision, optic disc hyperemia/papilledema</b></td></tr>
+                                        <tr><td class="p-2 font-bold">Ethylene Glycol</td><td class="p-2">↑</td><td class="p-2">↑</td><td class="p-2">Antifreeze; ΔMS, AKI, hypoCa, <b>Ca-oxalate crystals</b> (fluoresce under UV/black light)</td></tr>
+                                        <tr><td class="p-2 font-bold">Propylene Glycol</td><td class="p-2">Nl/↑</td><td class="p-2">↑</td><td class="p-2">IV solvent for phenytoin, lorazepam (&gt;10 mg); AKI, liver injury</td></tr>
+                                        <tr><td class="p-2 font-bold">Isopropyl Alcohol</td><td class="p-2">Nl</td><td class="p-2">↑</td><td class="p-2">Rubbing alcohol; Fruity breath (acetone), pancreatitis, <b>NO ketoacidosis (Normal AG!)</b></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            step4B: {
+                icon: "🍋",
+                title: "Step 4B: NAGMA, Urine Anion Gap (UAG) & RTA Types 1, 2, and 4",
+                html: `
+                    <div class="space-y-4">
+                        <div class="p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-200 space-y-1.5">
+                            <h4 class="font-cute font-bold text-amber-950 text-base">Why We Use Urine Anion Gap: UAG = (UNa⁺ + UK⁺) − UCl⁻</h4>
+                            <p class="text-xs text-slate-700">• Healthy kidneys get rid of extra acid in the distal tubules as <b>ammonium (NH₄⁺)</b>.</p>
+                            <p class="text-xs text-slate-700">• NH₄⁺ is hard to measure directly, so we use <b>Urine Cl⁻</b> as an analog because Cl⁻ drags out with NH₄⁺ (as NH₄Cl).</p>
+                            <p class="text-xs text-emerald-800 font-bold">• High Urine Cl⁻ ⇒ UAG is NEGATIVE ⇒ High acid excretion ⇒ Distal tubule works fine! (Cause is GI loss like Diarrhea, or Proximal RTA).</p>
+                            <p class="text-xs text-rose-800 font-bold">• Low Urine Cl⁻ ⇒ UAG is POSITIVE ⇒ Impaired distal acid excretion ⇒ Always Distal RTA (Type 1 or Type 4)!</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <!-- Type 2 Proximal -->
+                            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                                <div class="font-bold text-emerald-950 text-sm">Proximal RTA (Type 2)</div>
+                                <p><b>Defect:</b> Inability to reabsorb HCO₃⁻ in proximal tubule.</p>
+                                <p><b>Causes:</b> 1° Fanconi syndrome (pan-proximal failure: bicarb, phos, glucose, AA); 2° Multiple Myeloma (MM), amyloidosis; Meds: <b>Topiramate, Acetazolamide, Tenofovir</b>.</p>
+                                <p><b>Labs:</b> ↓ K⁺, <b>UAG Negative</b>, intact distal H⁺ excretion ⇒ <b>Very acidic urine (&lt; 5.3)</b>.</p>
+                                <p><b>Tx:</b> Alkali + mild thiazide diuresis.</p>
+                            </div>
+                            <!-- Type 1 Distal -->
+                            <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 space-y-1">
+                                <div class="font-bold text-rose-950 text-sm">Distal RTA (Type 1 - Classic)</div>
+                                <p><b>Defect:</b> Inability to excrete H⁺ in distal tubule ⇒ <b>Urine pH cannot be &lt; 5.5</b>.</p>
+                                <p><b>Causes:</b> <b>Sjögren's or SLE</b> (dry eyes/mouth), hypercalciuria &amp; <b>calcium phosphate stones</b>; Meds: <b>Amphotericin B, Lithium</b>. (If ↑K⁺: Sickle cell, reflux/obstruction, renal transplant).</p>
+                                <p><b>Labs:</b> Severe acidosis, <b>↓ K⁺</b>, <b>UAG Positive</b>, Urine pH &gt; 5.5.</p>
+                                <p><b>Tx:</b> Potassium citrate.</p>
+                            </div>
+                            <!-- Type 4 Distal -->
+                            <div class="p-3 rounded-xl bg-purple-50 border border-purple-200 space-y-1">
+                                <div class="font-bold text-purple-950 text-sm">Distal RTA (Type 4 - Hypoaldo)</div>
+                                <p><b>Defect:</b> Aldosterone deficiency or resistance ⇒ Cannot reabsorb Na⁺ or excrete K⁺ and H⁺.</p>
+                                <p><b>Causes:</b> <b>Diabetes</b>, HIV, obstructive uropathy, graft rejection; Meds: <b>ACEi/ARB, Heparin, NSAIDs, K⁺-sparing diuretics</b>.</p>
+                                <p><b>Labs:</b> <b>↑ K⁺ (Hyperkalemia)</b> + <b>UAG Positive</b>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-orange-50 border border-orange-300 text-xs">
+                            <b>⚠️ When UAG is NOT used:</b> In AKI, dehydration, or polyuria, UAG is unreliable. Use <b>Urine Osmolar Gap</b> = Measured U<sub>Osm</sub> − [2(Na⁺ + K⁺) + BUN + Glu (mmol/L)]. If <b>&lt; 40</b> = impaired NH₄⁺ excretion!
+                        </div>
+                    </div>
+                `
+            },
+            masterAlgo: {
+                icon: "📖",
+                title: "Complete Acid-Base Master Algorithm & Mnemonics",
+                html: `
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3.5 rounded-2xl bg-purple-50 border-2 border-purple-200">
+                                <h4 class="font-cute font-bold text-purple-950 text-sm mb-1">HAGMA Mnemonic (MUDPILES)</h4>
+                                <ul class="space-y-0.5 text-slate-700">
+                                    <li><b>M</b>ethanol (de-icing fluid, eye findings)</li>
+                                    <li><b>U</b>remia (renal failure organic anions)</li>
+                                    <li><b>D</b>iabetic Ketoacidosis (DKA)</li>
+                                    <li><b>P</b>henformin, Paraldehyde, Propylene glycol</li>
+                                    <li><b>I</b>soniazid (INH), Iron</li>
+                                    <li><b>L</b>actic acidosis (Δ/Δ ~ 1.6)</li>
+                                    <li><b>E</b>thanol, Ethylene glycol (antifreeze, Ca-Ox crystals)</li>
+                                    <li><b>S</b>alicylates (HAGMA + Respiratory Alkalosis)</li>
+                                </ul>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-200">
+                                <h4 class="font-cute font-bold text-amber-950 text-sm mb-1">NAGMA Mnemonic (HARDUP)</h4>
+                                <ul class="space-y-0.5 text-slate-700">
+                                    <li><b>H</b>yperalimentation (TPN) / Normal Saline overload</li>
+                                    <li><b>A</b>cetazolamide / Topiramate (Proximal RTA)</li>
+                                    <li><b>R</b>enal Tubular Acidosis (Types 1, 2, 4)</li>
+                                    <li><b>D</b>iarrhea / Laxative abuse (Urine K⁺ &lt; 20)</li>
+                                    <li><b>U</b>reterosigmoid fistula / ileal conduit</li>
+                                    <li><b>P</b>ancreatic fistula</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-200 text-xs space-y-1">
+                            <h4 class="font-cute font-bold text-emerald-950 text-sm">5-Step Checklist Summary</h4>
+                            <p><b>1. Primary Disorder:</b> Check pH, HCO₃⁻, and pCO₂.</p>
+                            <p><b>2. Compensation:</b> Winter's formula (Met Acid), 0.7 formula (Met Alk), or 1–4 / 2–5 rule (Resp).</p>
+                            <p><b>3. Serum Anion Gap:</b> Always compare to Albumin-Corrected AG.</p>
+                            <p><b>4A. If HAGMA:</b> Calculate Δ/Δ (&lt;1 +NAGMA, 1–2 Pure, &gt;2 +Met Alk) and Serum Osmolar Gap (&gt;10 Toxic Alcohol).</p>
+                            <p><b>4B. If NAGMA:</b> Calculate Urine Anion Gap (+ve = Distal RTA 1 or 4; −ve = Diarrhea or Proximal RTA 2).</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openModal(key) {
+            const data = EXPLANATIONS[key];
+            if (!data) return;
+            document.getElementById('modalIcon').textContent = data.icon;
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalBody').innerHTML = data.html;
+            document.getElementById('explainModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('explainModal').classList.add('hidden');
+        }
+
+        // Close modal on backdrop click or Escape key
+        document.getElementById('explainModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Initialize on load with Case 1 in Try It Yourself mode so user sees how the live equations work immediately
+        window.onload = function() {
+            document.getElementById('caseSelector').value = 'case1';
+            loadPresetCase('case1');
+        };
+    </script>
+    <script>
+        // Register the offline service worker (works on GitHub Pages / any https host)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js').catch(function () {});
+            });
+        }
+    </script>
+</body>
+</html>
