@@ -1,4 +1,4 @@
-# Acid-Base Calculation & Practice Sheet
+# Acid Bae Calculator
 
 An interactive, step-by-step acid-base worksheet (primary disorder → compensation → anion gap → Δ/Δ & osmolar gap → urine anion gap / RTA), with 8 practice cases, a "Try It Yourself" mode and an "Auto-Solve" mode.
 
@@ -9,6 +9,7 @@ It is an installable web app: open it on a phone and add it to the home screen, 
 | File | What it does |
 |---|---|
 | `index.html` | The whole app |
+| `favicon.ico`, `favicon.png` | The icon shown on the browser tab |
 | `manifest.webmanifest` | App name, colours and icons used when installing |
 | `sw.js` | Offline support |
 | `icons/` | App icons in the sizes phones and browsers need |

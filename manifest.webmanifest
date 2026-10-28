@@ -1,6 +1,6 @@
 {
-  "name": "Acid-Base Calculation & Practice Sheet",
-  "short_name": "Acid-Base",
+  "name": "Acid Bae Calculator",
+  "short_name": "Acid Bae",
   "description": "Step-by-step interactive acid-base calculation and practice worksheet.",
   "start_url": "./",
   "scope": "./",

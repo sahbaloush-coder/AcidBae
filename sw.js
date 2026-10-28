@@ -1,11 +1,12 @@
 // Offline support: caches the app on first visit so it opens without internet.
 // Bump VERSION whenever you upload a changed index.html so phones pick up the update.
-const VERSION = 'acid-base-v1';
+const VERSION = 'acid-base-v3';
 const APP_FILES = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icons/icon-32.png',
+  './favicon.ico',
+  './favicon.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
